@@ -22,6 +22,13 @@ Goal: beat a 360M-parameter LLM (SmolLM2-360M) on HumanEval pass@1 using one CPU
 |---|---|---|---|
 | SmolLM2-360M base (`baseline_llm.py`) | 13 (15.9%) | 8 (9.8%) | 21 (12.8%) |
 | NoNet Coder, checkpoint 1 (commit `3c816d1`) | 19 (23.2%) | 14 (17.1%) | 33 (20.1%) |
+| NoNet Coder, milestone 1 (commit `0940738`) | 18 (22.0%)* | not run | – |
+
+\* Two identical runs gave 18/82 with the same solved set (`results_dev_v5*.json`, with metadata in
+`results_dev_v5.meta.json`). The search budget is **wall-clock** and 7 workers oversubscribe the machine:
+the only v4→v5 loss (58) and the provisional-run win (101) both time out under the pool but pass 3/3 in
+isolation. Treat ±1–2 dev tasks as within measurement noise until the budget is made load-independent.
+The old and new scorers agreed on all 82 programs (`--ab-scorer`).
 
 Failure breakdown on test: 32 overfit (the program matches the examples but fails the hidden tests),
 25 timed out, 9 had no examples, 2 crashed with a KeyError.

@@ -1,0 +1,22 @@
+{
+ "commit": "094073837c57e80f63880bfb07b28dc41c92a4c9",
+ "dirty": false,
+ "python": "3.10.0",
+ "platform": "macOS-15.1.1-arm64-arm-64bit",
+ "machine": "arm64",
+ "cpu_count": 8,
+ "workers": 7,
+ "budget": 10.0,
+ "split": "dev",
+ "n": 82,
+ "scorer": "sandbox_runner --script (RLIMIT_CPU 15s, wall 15s; wall usually binds first)",
+ "ab_scorer": true,
+ "data_sha256_16": {
+  "data/HumanEval.jsonl": "1d49078ba3e2b196",
+  "data/mbpp.jsonl": "ccf64ceae9c5403b",
+  "data/prior.json": "1e6999377c35e589",
+  "data/split.json": "662854235462798d"
+ },
+ "started": "2026-11-17T01:07:24-0500",
+ "wall_secs": 119.6
+}
