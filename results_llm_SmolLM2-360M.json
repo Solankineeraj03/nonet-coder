@@ -1,0 +1,822 @@
+[
+ {
+  "id": 0,
+  "passed": false,
+  "completion": "\n    return any(abs(number - number_2) < threshold for number, number_2 in zip(numbers, numbers[1:]))\n\n"
+ },
+ {
+  "id": 1,
+  "passed": false,
+  "completion": "\n    # TODO: Implement this function\n    # return [paren_string[i:i+2] for i in range(len(paren_string)-1)]\n    return [paren_string[i:i+2] for i in range(len(paren_string)-1)]\n\n"
+ },
+ {
+  "id": 2,
+  "passed": false,
+  "completion": "\n    return int(number)\n\n"
+ },
+ {
+  "id": 3,
+  "passed": false,
+  "completion": "\n    for operation in operations:\n        if operation < 0:\n            return True\n    return False\n\n"
+ },
+ {
+  "id": 4,
+  "passed": false,
+  "completion": "\n    return sum(abs(numbers - mean(numbers))) / len(numbers)\n\n"
+ },
+ {
+  "id": 5,
+  "passed": false,
+  "completion": "\n    return [numbers[i] + delimeter for i in range(len(numbers))]\n\n"
+ },
+ {
+  "id": 6,
+  "passed": false,
+  "completion": "\n    paren_string = paren_string.replace('(', '(').replace(')', ')')\n    paren_string = paren_string.replace('(', '(').replace(')', ')')\n    paren_string = paren_string.replace('(', '(').replace(')', ')')\n    paren_string = paren_string.replace(')', '(').replace(')', ')')\n    paren_string = paren_string.replace(')', '(').replace(')', ')')\n    paren_string = paren_string.replace('(', '(').replace(')', ')')\n    paren_string = paren_string.replace(')', '(').replace(')', ')')\n    paren_string = paren_string.replace(')', '(').replace(')', ')')\n    paren_string = paren_string.replace('(', '(').replace(')', ')')\n    paren_string = paren_string.replace(')', '(').replace(')', ')')\n    paren_string = paren_string.replace('(', '(').replace(')', ')')\n    paren_string = paren_string.replace(')', '(').replace(')', ')')\n    paren_string = paren_string.replace('(', '(').replace(')', ')')\n    paren_string = paren_string.replace(')', '(').replace(')', ')')\n    paren_string = paren_string.replace('(', '(').replace(')', ')')\n    paren_string = paren_string.replace(')', '(').replace(')', ')')\n    paren_string = paren_string.replace('(', '(').replace(')', ')')\n    paren_string = paren_string.replace(')', '(').replace(')', ')')\n    paren_string = paren_string.replace('(', '(').replace(')', ')')\n    paren_string"
+ },
+ {
+  "id": 7,
+  "passed": false,
+  "completion": "\n    return [s for s in strings if s.startswith(substring)]\n\n"
+ },
+ {
+  "id": 8,
+  "passed": false,
+  "completion": "\n    return sum(numbers), 1\n\n"
+ },
+ {
+  "id": 9,
+  "passed": false,
+  "completion": "\n    max_list = []\n    for i in range(len(numbers) - 1):\n        max_list.append(numbers[i] + numbers[i + 1])\n    return max_list\n\n"
+ },
+ {
+  "id": 10,
+  "passed": false,
+  "completion": "\n    if len(string) == 0:\n        return ''\n    if len(string) == 1:\n        return string\n    if is_palindrome(string[0]):\n        return make_palindrome(string[1:]) + string[0]\n    else:\n        return make_palindrome(string[1:]) + string[0] + string[0]\n\n"
+ },
+ {
+  "id": 11,
+  "passed": false,
+  "completion": "\n    return ''.join(map(str, [a ^ b] * len(a)))\n\n"
+ },
+ {
+  "id": 12,
+  "passed": true,
+  "completion": "\n    if not strings:\n        return None\n    if len(strings) == 1:\n        return strings[0]\n    if len(strings) == 2:\n        return strings[0] if strings[0] > strings[1] else strings[1]\n    return max(strings, key=len)\n\n"
+ },
+ {
+  "id": 13,
+  "passed": true,
+  "completion": "\n    if a == 0 or b == 0:\n        return 0\n    while a != 0 and b != 0:\n        if a > b:\n            a = a % b\n        else:\n            b = b % a\n    return a if a > b else b\n\n"
+ },
+ {
+  "id": 14,
+  "passed": false,
+  "completion": "\n    return [s for s in string.split('') if len(s) > 0]\n\n"
+ },
+ {
+  "id": 15,
+  "passed": false,
+  "completion": "\n    return ' '.join(map(str, range(n)))\n\n"
+ },
+ {
+  "id": 16,
+  "passed": false,
+  "completion": "\n    return len(set(string))\n\n"
+ },
+ {
+  "id": 17,
+  "passed": false,
+  "completion": "\n    music_list = music_string.split('|')\n    music_list = [int(x) for x in music_list]\n    return music_list\n\n"
+ },
+ {
+  "id": 18,
+  "passed": false,
+  "completion": "\n    if substring in string:\n        return 1\n    else:\n        return 0\n\n"
+ },
+ {
+  "id": 19,
+  "passed": false,
+  "completion": "\n    numbers = numbers.split()\n    numbers = [int(number) for number in numbers]\n    numbers.sort()\n    return ' '.join(map(str, numbers))\n\n"
+ },
+ {
+  "id": 20,
+  "passed": false,
+  "completion": "\n    if len(numbers) < 2:\n        raise ValueError(\"Must have at least two numbers\")\n\n    min_diff = float(\"inf\")\n    min_index = 0\n    for i in range(len(numbers)):\n        diff = abs(numbers[i] - numbers[i + 1])\n        if diff < min_diff:\n            min_diff = diff\n            min_index = i\n\n    return numbers[min_index], numbers[min_index + 1]\n\n"
+ },
+ {
+  "id": 21,
+  "passed": false,
+  "completion": "\n    return [x / max(numbers) for x in numbers]\n\n"
+ },
+ {
+  "id": 22,
+  "passed": false,
+  "completion": "\n    return [int(x) for x in values]\n\n"
+ },
+ {
+  "id": 23,
+  "passed": true,
+  "completion": "\n    return len(string)\n\n"
+ },
+ {
+  "id": 24,
+  "passed": false,
+  "completion": "\n    if n == 1:\n        return 1\n    if n == 2:\n        return 2\n    if n % 2 == 0:\n        return 2\n    if n % 3 == 0:\n        return 3\n    if n % 5 == 0:\n        return 5\n    if n % 7 == 0:\n        return 7\n    if n % 11 == 0:\n        return 11\n    if n % 13 == 0:\n        return 13\n    if n % 17 == 0:\n        return 17\n    if n % 19 == 0:\n        return 19\n    if n % 23 == 0:\n        return 23\n    if n % 29 == 0:\n        return 29\n    if n % 31 == 0:\n        return 31\n    if n % 37 == 0:\n        return 37\n    if n % 41 == 0:\n        return 41\n    if n % 43 == 0:\n        return 43\n    if n % 47 == 0:\n        return 47\n    if n % 53 == 0:\n        return 53\n    if n % 59 == 0:\n        return 59\n    if n % 61 == 0:\n        return 61\n    if n % 67 == 0:\n        return 67\n    if n % 71 == 0:\n        return 71\n    if n % 73 == 0:\n        return 73\n    if n % 79 == 0:\n        return 79\n    if n % 83 == 0:\n        return 83\n    if"
+ },
+ {
+  "id": 25,
+  "passed": false,
+  "completion": "\n    factors = []\n    while n > 1:\n        if n % 2 == 0:\n            factors.append(2)\n            n //= 2\n        elif n % 5 == 0:\n            factors.append(5)\n            n //= 5\n        else:\n            factors.append(n)\n            n //= n\n    return factors\n\n"
+ },
+ {
+  "id": 26,
+  "passed": false,
+  "completion": "\n    seen = set()\n    for num in numbers:\n        if num not in seen:\n            seen.add(num)\n            numbers.remove(num)\n    return numbers\n\n"
+ },
+ {
+  "id": 27,
+  "passed": true,
+  "completion": "\n    return string.swapcase()\n\n"
+ },
+ {
+  "id": 28,
+  "passed": false,
+  "completion": "\n    return ' '.join(strings)\n\n"
+ },
+ {
+  "id": 29,
+  "passed": true,
+  "completion": "\n    return [s for s in strings if s.startswith(prefix)]\n\n"
+ },
+ {
+  "id": 30,
+  "passed": true,
+  "completion": "\n    return [x for x in l if x > 0]\n\n"
+ },
+ {
+  "id": 31,
+  "passed": false,
+  "completion": "\n    if n == 0:\n        return False\n    if n == 1:\n        return True\n    if n == 2:\n        return True\n    if n % 2 == 0:\n        return False\n    for i in range(3, int(n ** 0.5) + 1, 2):\n        if n % i == 0:\n            return False\n    return True\n"
+ },
+ {
+  "id": 32,
+  "passed": false,
+  "completion": "\n    if len(xs) % 2 != 0:\n        raise ValueError(\"find_zero only works with even number of coefficients\")\n    return poly(xs, 0)\n\n"
+ },
+ {
+  "id": 33,
+  "passed": false,
+  "completion": "\n    l_copy = copy.deepcopy(l)\n    l_copy_copy = copy.deepcopy(l_copy)\n    l_copy_copy_copy = copy.deepcopy(l_copy_copy)\n    l_copy_copy_copy_copy = copy.deepcopy(l_copy_copy_copy)\n    l_copy_copy_copy_copy_copy = copy.deepcopy(l_copy_copy_copy_copy_copy)\n    l_copy_copy_copy_copy_copy_copy = copy.deepcopy(l_copy_copy_copy_copy_copy_copy)\n    l_copy_copy_copy_copy_copy_copy_copy = copy.deepcopy(l_copy_copy_copy_copy_copy_copy_copy)\n    l_copy_copy_copy_copy_copy_copy_copy_copy = copy.deepcopy(l_copy_copy_copy_copy_copy_copy_copy_copy)\n    l_copy_copy_copy_copy_copy_copy_copy_copy_copy = copy.deepcopy(l_copy_copy_copy_copy_copy_copy_copy_copy_copy)\n    l_copy_copy_copy_copy_copy_copy_copy_copy_copy_copy = copy.deepcopy(l_copy_copy_copy_copy_copy_copy_copy_copy_copy_copy)\n    l_copy_copy_copy_copy_copy_copy_copy_copy_copy_copy_copy = copy.deepcopy(l_copy_copy_copy_copy_copy_copy_copy_copy_copy_copy)\n    l_copy_copy_copy_copy_copy_copy_copy_copy_copy_copy_copy_copy = copy.deepcopy("
+ },
+ {
+  "id": 34,
+  "passed": true,
+  "completion": "\n    return sorted(set(l))\n"
+ },
+ {
+  "id": 35,
+  "passed": true,
+  "completion": "\n    return max(l)\n\n"
+ },
+ {
+  "id": 36,
+  "passed": false,
+  "completion": "\n    return sum(1 for i in range(n) if i % 11 == 0 or i % 13 == 0)\n\n"
+ },
+ {
+  "id": 37,
+  "passed": false,
+  "completion": "\n    l_even = []\n    for i in range(len(l)):\n        if i % 2 == 0:\n            l_even.append(l[i])\n    return l_even\n\n"
+ },
+ {
+  "id": 38,
+  "passed": false,
+  "completion": "\n    # split string to groups. Each of length 3.\n    groups = [s[(3 * i):min((3 * i + 3), len(s))] for i in range((len(s) + 2) // 3)]\n    # cycle elements in each group. Unless group has fewer elements than 3.\n    groups = [(group[1:] + group[0]) if len(group) == 3 else group for group in groups]\n    # join groups back to string.\n    return \"\".join(groups)\n\n"
+ },
+ {
+  "id": 39,
+  "passed": false,
+  "completion": "\n    if n == 1:\n        return 2\n    elif n == 2:\n        return 3\n    elif n == 3:\n        return 5\n    else:\n        return prime_fib(n - 1) + prime_fib(n - 2)\n\n"
+ },
+ {
+  "id": 40,
+  "passed": true,
+  "completion": "\n    for i in range(len(l)):\n        for j in range(i + 1, len(l)):\n            for k in range(j + 1, len(l)):\n                if l[i] + l[j] + l[k] == 0:\n                    return True\n    return False\n\n"
+ },
+ {
+  "id": 41,
+  "passed": false,
+  "completion": "\n    # TODO: Implement this function\n    # 1. Define a function that takes in a number n\n    # 2. Define a function that takes in a list of cars\n    # 3. Define a function that takes in a list of cars\n    # 4. Define a function that takes in a list of cars\n    # 5. Define a function that takes in a list of cars\n    # 6. Define a function that takes in a list of cars\n    # 7. Define a function that takes in a list of cars\n    # 8. Define a function that takes in a list of cars\n    # 9. Define a function that takes in a list of cars\n    # 10. Define a function that takes in a list of cars\n    # 11. Define a function that takes in a list of cars\n    # 12. Define a function that takes in a list of cars\n    # 13. Define a function that takes in a list of cars\n    # 14. Define a function that takes in a list of cars\n    # 15. Define a function that takes in a list of cars\n    # 16. Define a function that takes in a list of cars\n    # 17. Define a function that takes in a list of cars\n    # 18. Define a function that takes in a list of cars\n    # 19. Define a function that takes in a list of cars\n    # 20. Define a function that takes in a list of cars\n    # 21. Define a function that takes in a list of cars\n    # 22. Define a function that takes in a list of cars\n    # 23. Define a function that takes in a list of cars\n    # 24. Define a function that takes in a list of cars\n    # "
+ },
+ {
+  "id": 42,
+  "passed": true,
+  "completion": "\n    return [x + 1 for x in l]\n\n"
+ },
+ {
+  "id": 43,
+  "passed": true,
+  "completion": "\n    for i in range(len(l)):\n        for j in range(i + 1, len(l)):\n            if l[i] + l[j] == 0:\n                return True\n    return False\n"
+ },
+ {
+  "id": 44,
+  "passed": false,
+  "completion": "\n    if base < 10:\n        return str(x)\n    else:\n        return change_base(int(x / base), base - 1) + str(x % base)\n"
+ },
+ {
+  "id": 45,
+  "passed": true,
+  "completion": "\n    return a * h / 2\n"
+ },
+ {
+  "id": 46,
+  "passed": false,
+  "completion": "\n    if n == 0:\n        return 0\n    elif n == 1:\n        return 1\n    else:\n        return fib4(n-1) + fib4(n-2) + fib4(n-3) + fib4(n-4)\n"
+ },
+ {
+  "id": 47,
+  "passed": false,
+  "completion": "\n    if len(l) == 0:\n        return 0\n    if len(l) == 1:\n        return l[0]\n    if len(l) % 2 == 0:\n        return (l[len(l) // 2] + l[len(l) // 2 - 1]) / 2\n    else:\n        return l[len(l) // 2]\n\n"
+ },
+ {
+  "id": 48,
+  "passed": true,
+  "completion": "\n    return text == text[::-1]\n\n"
+ },
+ {
+  "id": 49,
+  "passed": true,
+  "completion": "\n    return pow(2, n, p)\n"
+ },
+ {
+  "id": 50,
+  "passed": true,
+  "completion": "\n    return \"\".join([chr(((ord(ch) - 5 - ord(\"a\")) % 26) + ord(\"a\")) for ch in s])\n\n"
+ },
+ {
+  "id": 51,
+  "passed": true,
+  "completion": "\n    return ''.join(c for c in text if c not in 'aeiouAEIOU')\n"
+ },
+ {
+  "id": 52,
+  "passed": true,
+  "completion": "\n    return all(l[i] < t for i in range(len(l)))\n\n"
+ },
+ {
+  "id": 53,
+  "passed": true,
+  "completion": "\n    return x + y\n"
+ },
+ {
+  "id": 54,
+  "passed": false,
+  "completion": "\n    return s0 == s1\n\n"
+ },
+ {
+  "id": 55,
+  "passed": true,
+  "completion": "\n    if n == 1:\n        return 1\n    elif n == 2:\n        return 1\n    else:\n        return fib(n-1) + fib(n-2)\n"
+ },
+ {
+  "id": 56,
+  "passed": false,
+  "completion": "\n    brackets = brackets.split(\">\")\n    for bracket in brackets:\n        if bracket == \"<\":\n            if brackets.index(bracket) == 0:\n                return False\n        elif bracket == \">\":\n            if brackets.index(bracket) == len(brackets) - 1:\n                return False\n        else:\n            return False\n    return True\n\n"
+ },
+ {
+  "id": 57,
+  "passed": false,
+  "completion": "\n    return all(l[i] < l[i+1] for i in range(len(l)-1))\n"
+ },
+ {
+  "id": 58,
+  "passed": true,
+  "completion": "\n    return sorted(set(l1) & set(l2))\n\n"
+ },
+ {
+  "id": 59,
+  "passed": false,
+  "completion": "\n    if n == 1:\n        return 1\n    if n % 2 == 0:\n        return largest_prime_factor(n // 2)\n    if n % 3 == 0:\n        return largest_prime_factor(n // 3)\n    if n % 5 == 0:\n        return largest_prime_factor(n // 5)\n    if n % 7 == 0:\n        return largest_prime_factor(n // 7)\n    if n % 11 == 0:\n        return largest_prime_factor(n // 11)\n    if n % 13 == 0:\n        return largest_prime_factor(n // 13)\n    if n % 17 == 0:\n        return largest_prime_factor(n // 17)\n    if n % 19 == 0:\n        return largest_prime_factor(n // 19)\n    if n % 23 == 0:\n        return largest_prime_factor(n // 23)\n    if n % 29 == 0:\n        return largest_prime_factor(n // 29)\n    if n % 31 == 0:\n        return largest_prime_factor(n // 31)\n    if n % 37 == 0:\n        return largest_prime_factor(n // 37)\n    if n % 41 == 0:\n        return largest_prime_factor(n // 41)\n    if n % 43 == 0:\n        return largest_prime_factor(n // 43)\n    if n % 47 == 0:\n        return largest_prime_factor(n // 47)\n    if n % 5"
+ },
+ {
+  "id": 60,
+  "passed": true,
+  "completion": "\n    if n == 1:\n        return 1\n    return n + sum_to_n(n - 1)\n\n"
+ },
+ {
+  "id": 61,
+  "passed": false,
+  "completion": "\n    brackets = brackets.split()\n    for bracket in brackets:\n        if bracket == \"(\":\n            brackets.remove(\"(\")\n        elif bracket == \")\":\n            brackets.remove(\")\")\n    return len(brackets) == 0\n\n"
+ },
+ {
+  "id": 62,
+  "passed": false,
+  "completion": "\n    return [1, 2, 3]\n\n"
+ },
+ {
+  "id": 63,
+  "passed": false,
+  "completion": "\n    if n == 0:\n        return 0\n    elif n == 1:\n        return 1\n    else:\n        return fibfib(n-1) + fibfib(n-2) + fibfib(n-3)\n\n"
+ },
+ {
+  "id": 64,
+  "passed": false,
+  "completion": "\n    vowels = \"aeiou\"\n    return sum(1 for c in s if c in vowels)\n"
+ },
+ {
+  "id": 65,
+  "passed": false,
+  "completion": "\n    if shift > len(x):\n        return x[::-1]\n    return str(int(x) + int(x) * (2 ** shift))\n\n"
+ },
+ {
+  "id": 66,
+  "passed": false,
+  "completion": "\n    return sum(ord(c) for c in s)\n\n"
+ },
+ {
+  "id": 67,
+  "passed": false,
+  "completion": "\n    # your code here\n    if n == 0:\n        return 0\n    if n == 1:\n        return 1\n    if n == 2:\n        return 2\n    if n == 3:\n        return 3\n    if n == 4:\n        return 4\n    if n == 5:\n        return 5\n    if n == 6:\n        return 6\n    if n == 7:\n        return 7\n    if n == 8:\n        return 8\n    if n == 9:\n        return 9\n    if n == 10:\n        return 10\n    if n == 11:\n        return 11\n    if n == 12:\n        return 12\n    if n == 13:\n        return 13\n    if n == 14:\n        return 14\n    if n == 15:\n        return 15\n    if n == 16:\n        return 16\n    if n == 17:\n        return 17\n    if n == 18:\n        return 18\n    if n == 19:\n        return 19\n    if n == 20:\n        return 20\n    if n == 21:\n        return 21\n    if n == 22:\n        return 22\n    if n == 23:\n        return 23\n    if n == 24:\n        return 24\n    if n == 25:\n        return 25\n    if n == 26:\n        return 26\n    if n == 27:\n        return 27\n    if n == 28:\n        return 28\n    if n == 29:\n        return 29\n    if n == 30:\n       "
+ },
+ {
+  "id": 68,
+  "passed": false,
+  "completion": "\n    if not arr:\n        return []\n    if len(arr) == 1:\n        return [arr[0], 0]\n    if len(arr) == 2:\n        return [arr[0], arr[1]]\n    if len(arr) == 3:\n        return [arr[0], arr[1], arr[2]]\n    if len(arr) == 4:\n        return [arr[0], arr[1], arr[2], arr[3]]\n    if len(arr) == 5:\n        return [arr[0], arr[1], arr[2], arr[3], arr[4]]\n    if len(arr) == 6:\n        return [arr[0], arr[1], arr[2], arr[3], arr[4], arr[5]]\n    if len(arr) == 7:\n        return [arr[0], arr[1], arr[2], arr[3], arr[4], arr[5], arr[6]]\n    if len(arr) == 8:\n        return [arr[0], arr[1], arr[2], arr[3], arr[4], arr[5], arr[6], arr[7]]\n    if len(arr) == 9:\n        return [arr[0], arr[1], arr[2], arr[3], arr[4], arr[5], arr[6], arr[7], arr[8]]\n    if len(arr) == 10:\n        return [arr[0], arr[1], arr[2], arr[3], arr[4], arr[5], arr[6], arr[7], arr[8], arr[9]]\n    if len(arr) == 11:\n        return [arr[0], arr[1],"
+ },
+ {
+  "id": 69,
+  "passed": false,
+  "completion": "\n    if not lst:\n        return -1\n    max_freq = 0\n    max_freq_index = 0\n    for i in range(len(lst)):\n        freq = lst[i]\n        if freq > max_freq:\n            max_freq = freq\n            max_freq_index = i\n    return max_freq_index\n"
+ },
+ {
+  "id": 70,
+  "passed": false,
+  "completion": "\n    lst.sort()\n    return lst[::-1]\n\n"
+ },
+ {
+  "id": 71,
+  "passed": false,
+  "completion": "\n    if a + b > c and a + c > b and b + c > a:\n        return 0.5 * (a + b) * c\n    else:\n        return -1\n"
+ },
+ {
+  "id": 72,
+  "passed": false,
+  "completion": "\n    return q.is_balanced() and q.sum() <= w\n"
+ },
+ {
+  "id": 73,
+  "passed": false,
+  "completion": "\n    # TODO: Implement your solution here\n    # 1. Create a list of all possible changes\n    # 2. Create a list of all possible changes\n    # 3. Create a list of all possible changes\n    # 4. Create a list of all possible changes\n    # 5. Create a list of all possible changes\n    # 6. Create a list of all possible changes\n    # 7. Create a list of all possible changes\n    # 8. Create a list of all possible changes\n    # 9. Create a list of all possible changes\n    # 10. Create a list of all possible changes\n    # 11. Create a list of all possible changes\n    # 12. Create a list of all possible changes\n    # 13. Create a list of all possible changes\n    # 14. Create a list of all possible changes\n    # 15. Create a list of all possible changes\n    # 16. Create a list of all possible changes\n    # 17. Create a list of all possible changes\n    # 18. Create a list of all possible changes\n    # 19. Create a list of all possible changes\n    # 20. Create a list of all possible changes\n    # 21. Create a list of all possible changes\n    # 22. Create a list of all possible changes\n    # 23. Create a list of all possible changes\n    # 24. Create a list of all possible changes\n    # 25. Create a list of all possible changes\n    # 26. Create a list of all possible changes\n    # 27. Create a list of all possible changes\n    # 28. Create a list of all possible changes\n    # 29. Create a list of all possible changes\n    # 30. Create a"
+ },
+ {
+  "id": 74,
+  "passed": false,
+  "completion": "\n    lst1 = [x for x in lst1 if len(x) < len(lst2)]\n    return lst1\n"
+ },
+ {
+  "id": 75,
+  "passed": false,
+  "completion": "\n    if a < 100:\n        for i in range(2, a):\n            if a % i == 0:\n                return False\n        return True\n    else:\n        return False\n"
+ },
+ {
+  "id": 76,
+  "passed": false,
+  "completion": "\n    return x == int(x) ** n\n\n"
+ },
+ {
+  "id": 77,
+  "passed": false,
+  "completion": "\n    if a == 0:\n        return False\n    if a == 1:\n        return True\n    if a == 2:\n        return True\n    if a == 3:\n        return True\n    if a == 4:\n        return True\n    if a == 5:\n        return True\n    if a == 6:\n        return True\n    if a == 7:\n        return True\n    if a == 8:\n        return True\n    if a == 9:\n        return True\n    if a == 10:\n        return True\n    if a == 11:\n        return True\n    if a == 12:\n        return True\n    if a == 13:\n        return True\n    if a == 14:\n        return True\n    if a == 15:\n        return True\n    if a == 16:\n        return True\n    if a == 17:\n        return True\n    if a == 18:\n        return True\n    if a == 19:\n        return True\n    if a == 20:\n        return True\n    if a == 21:\n        return True\n    if a == 22:\n        return True\n    if a == 23:\n        return True\n    if a == 24:\n        return True\n    if a == 25:\n        return True\n    if a == 26:\n        return True\n    if a == 27:\n        return True\n    if a == 28:\n        return True\n    if a == 29:\n        return True\n    if a == 30:\n        return True\n    if a == 31:\n        return True\n    if a == 32:\n        return True\n    if a == 33:\n        return True\n    if a == 34:\n        return True\n    if a == 35:\n       "
+ },
+ {
+  "id": 78,
+  "passed": false,
+  "completion": "\n    if num == \"\":\n        return 0\n    if len(num) == 0:\n        return 0\n    if num[0] == \"0\":\n        return 0\n    if num[0] == \"A\":\n        return 1\n    if num[0] == \"B\":\n        return 2\n    if num[0] == \"C\":\n        return 3\n    if num[0] == \"D\":\n        return 4\n    if num[0] == \"E\":\n        return 5\n    if num[0] == \"F\":\n        return 6\n    if num[0] == \"A\":\n        return 1\n    if num[0] == \"B\":\n        return 2\n    if num[0] == \"C\":\n        return 3\n    if num[0] == \"D\":\n        return 4\n    if num[0] == \"E\":\n        return 5\n    if num[0] == \"F\":\n        return 6\n    if num[0] == \"A\":\n        return 1\n    if num[0] == \"B\":\n        return 2\n    if num[0] == \"C\":\n        return 3\n    if num[0] == \"D\":\n        return 4\n    if num[0] == \"E\":\n        return 5\n    if num[0] == \"F\":\n        return 6\n    if num[0] == \"A\":\n        return 1\n    if num[0] == \"B\":\n        return 2\n    if num[0] == \"C\":\n        return 3\n    if num[0] == \"D\":\n        return 4\n    if num[0] == \"E\":\n        return 5\n    if num[0] == \"F\":\n        return 6\n    if num[0] == \"A\":\n       "
+ },
+ {
+  "id": 79,
+  "passed": false,
+  "completion": "\n    binary = ''\n    while decimal > 0:\n        binary += str(decimal % 2)\n        decimal = decimal // 2\n    binary = binary[::-1]\n    return binary\n\n"
+ },
+ {
+  "id": 80,
+  "passed": false,
+  "completion": "\n    if len(s) < 3:\n        return False\n    if s[0] == s[-1]:\n        return is_happy(s[1:-1])\n    return False\n\n"
+ },
+ {
+  "id": 81,
+  "passed": false,
+  "completion": "\n    # your code here\n    # 1. Create a list of all the grades\n    grades = [4.0, 3, 1.7, 2, 3.5]\n    # 2. Create a dictionary of all the letter grades\n    letter_grades = {\n        'A+': 'A',\n        'A': 'A',\n        'A-': 'A-',\n        'B+': 'B',\n        'B': 'B',\n        'B-': 'B-',\n        'C+': 'C',\n        'C': 'C',\n        'C-': 'C-',\n        'D+': 'D',\n        'D': 'D',\n        'E': 'E'\n    }\n    # 3. Create a list of all the letter grades\n    letter_grades = {\n        'A+': 'A',\n        'A': 'A',\n        'A-': 'A-',\n        'B+': 'B',\n        'B': 'B',\n        'B-': 'B-',\n        'C+': 'C',\n        'C': 'C',\n        'C-': 'C-',\n        'D+': 'D',\n        'D': 'D',\n        'E': 'E'\n    }\n    # 4. Create a list of all the letter grades\n    letter_grades = {\n        'A+': 'A',\n        'A': 'A',\n        'A-': 'A-',\n        'B+': 'B',\n        'B': 'B',\n        'B-': 'B-',\n        'C+': 'C',\n        'C': 'C',\n        'C-': 'C-',\n        'D+': 'D',\n        'D': 'D',\n        'E': 'E'"
+ },
+ {
+  "id": 82,
+  "passed": false,
+  "completion": "\n    if len(string) == 1:\n        return True\n    if len(string) == 2:\n        return False\n    if string[0] == string[1]:\n        return False\n    if string[0] == '0' or string[0] == '1':\n        return False\n    if string[0] == '2' or string[0] == '3' or string[0] == '4' or string[0] == '5' or string[0] == '6' or string[0] == '7' or string[0] == '8' or string[0] == '9':\n        return False\n    if string[0] == 'a' or string[0] == 'b' or string[0] == 'c' or string[0] == 'd' or string[0] == 'e' or string[0] == 'f' or string[0] == 'g' or string[0] == 'h' or string[0] == 'i' or string[0] == 'j' or string[0] == 'k' or string[0] == 'l' or string[0] == 'm' or string[0] == 'n' or string[0] == 'o' or string[0] == 'p' or string[0] == 'q' or string[0] == 'r' or string[0] == 's' or string[0] == 't' or string[0] == 'u' or string[0] == 'v' or string[0] == 'w' or string[0] == 'x' or string[0] == 'y' or string[0] == 'z':\n        return False\n    if string[0] == '"
+ },
+ {
+  "id": 83,
+  "passed": false,
+  "completion": "\n    return sum(1 for i in range(1, n+1) if i%10==1)\n"
+ },
+ {
+  "id": 84,
+  "passed": false,
+  "completion": "\n    # Your code here\n    return str(bin(N)[2:])\n"
+ },
+ {
+  "id": 85,
+  "passed": false,
+  "completion": "\n    if not lst:\n        return []\n    if len(lst) % 2 == 0:\n        return lst\n    return [lst[i] for i in range(len(lst)) if i % 2 == 0]\n"
+ },
+ {
+  "id": 86,
+  "passed": false,
+  "completion": "\n    return ''.join(sorted(s, key=lambda x: ord(x)))\n\n"
+ },
+ {
+  "id": 87,
+  "passed": false,
+  "completion": "\n    lst = sorted(lst, key=lambda x: x[0])\n    return [(x[0], x[1]) for x in lst]\n"
+ },
+ {
+  "id": 88,
+  "passed": false,
+  "completion": "\n    if not array:\n        return []\n    if sum(array) % 2 == 1:\n        return sort_array(array[1:]) + array[:1]\n    else:\n        return sort_array(array[:1]) + sort_array(array[1:])\n\n"
+ },
+ {
+  "id": 89,
+  "passed": false,
+  "completion": "\n    # TODO: Implement the function encrypt\n    # Hint: You can use the rotate function from the previous exercise\n    # to rotate the alphabet.\n    # Hint: You can use the rotate function from the previous exercise\n    # to rotate the alphabet.\n    # Hint: You can use the rotate function from the previous exercise\n    # to rotate the alphabet.\n    # Hint: You can use the rotate function from the previous exercise\n    # to rotate the alphabet.\n    # Hint: You can use the rotate function from the previous exercise\n    # to rotate the alphabet.\n    # Hint: You can use the rotate function from the previous exercise\n    # to rotate the alphabet.\n    # Hint: You can use the rotate function from the previous exercise\n    # to rotate the alphabet.\n    # Hint: You can use the rotate function from the previous exercise\n    # to rotate the alphabet.\n    # Hint: You can use the rotate function from the previous exercise\n    # to rotate the alphabet.\n    # Hint: You can use the rotate function from the previous exercise\n    # to rotate the alphabet.\n    # Hint: You can use the rotate function from the previous exercise\n    # to rotate the alphabet.\n    # Hint: You can use the rotate function from the previous exercise\n    # to rotate the alphabet.\n    # Hint: You can use the rotate function from the previous exercise\n    # to rotate the alphabet.\n    # Hint: You can use the rotate function from the previous exercise\n    # to rotate the alphabet.\n    # Hint: You can use the rotate function from the previous exercise\n    # to rotate the alphabet.\n    # Hint: You can use the rotate function from the previous exercise\n    # to rotate the alphabet.\n    # Hint: You can use the rotate function from the previous exercise\n    # to rotate the alphabet.\n    #"
+ },
+ {
+  "id": 90,
+  "passed": false,
+  "completion": "\n    # Your code here\n    if len(lst) == 0:\n        return None\n    elif len(lst) == 1:\n        return lst[0]\n    else:\n        return min(lst[1:])\n"
+ },
+ {
+  "id": 91,
+  "passed": false,
+  "completion": "\n    # Your code here\n    if S.startswith('I'):\n        return 1\n    else:\n        return 0\n"
+ },
+ {
+  "id": 92,
+  "passed": false,
+  "completion": "\n    return any(x == y + z for x, y, z in zip(x, y, z)) and all(isinstance(x, int) for x in x)\n"
+ },
+ {
+  "id": 93,
+  "passed": false,
+  "completion": "\n    # TODO: Write your code here\n    # 1. Create a list of all the letters in the alphabet\n    # 2. Create a list of all the vowels in the alphabet\n    # 3. Create a list of all the letters that appear 2 places ahead of the vowels\n    # 4. Create a list of all the letters that appear 2 places ahead of the vowels\n    # 5. Create a list of all the letters that appear 2 places ahead of the vowels\n    # 6. Create a list of all the letters that appear 2 places ahead of the vowels\n    # 7. Create a list of all the letters that appear 2 places ahead of the vowels\n    # 8. Create a list of all the letters that appear 2 places ahead of the vowels\n    # 9. Create a list of all the letters that appear 2 places ahead of the vowels\n    # 10. Create a list of all the letters that appear 2 places ahead of the vowels\n    # 11. Create a list of all the letters that appear 2 places ahead of the vowels\n    # 12. Create a list of all the letters that appear 2 places ahead of the vowels\n    # 13. Create a list of all the letters that appear 2 places ahead of the vowels\n    # 14. Create a list of all the letters that appear 2 places ahead of the vowels\n    # 15. Create a list of all the letters that appear 2 places ahead of the vowels\n    # 16. Create a list of all the letters that appear 2 places ahead of the vowels\n    # 17. Create a list of all the letters that appear 2 places ahead of the vowels\n    # 18. Create a list of all the letters that appear 2 places ahead of the vowels\n   "
+ },
+ {
+  "id": 94,
+  "passed": false,
+  "completion": "\n    lst = list(map(int, lst))\n    max_prime = 0\n    max_sum = 0\n    for i in range(len(lst)):\n        if lst[i] > 1:\n            prime = 0\n            for j in range(2, int(lst[i] ** 0.5) + 1):\n                if lst[i] % j == 0:\n                    prime += 1\n            if prime > 1:\n                max_prime = lst[i]\n                max_sum = lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst[i] + lst["
+ },
+ {
+  "id": 95,
+  "passed": false,
+  "completion": "\n    if not dict:\n        return False\n    if not isinstance(dict, dict):\n        return False\n    if not isinstance(dict, str):\n        return False\n    if not isinstance(dict, str):\n        return False\n    if not isinstance(dict, str):\n        return False\n    if not isinstance(dict, str):\n        return False\n    if not isinstance(dict, str):\n        return False\n    if not isinstance(dict, str):\n        return False\n    if not isinstance(dict, str):\n        return False\n    if not isinstance(dict, str):\n        return False\n    if not isinstance(dict, str):\n        return False\n    if not isinstance(dict, str):\n        return False\n    if not isinstance(dict, str):\n        return False\n    if not isinstance(dict, str):\n        return False\n    if not isinstance(dict, str):\n        return False\n    if not isinstance(dict, str):\n        return False\n    if not isinstance(dict, str):\n        return False\n    if not isinstance(dict, str):\n        return False\n    if not isinstance(dict, str):\n        return False\n    if not isinstance(dict, str):\n        return False\n    if not isinstance(dict, str):\n        return False\n    if not isinstance(dict, str):\n        return False\n    if not isinstance(dict, str):\n        return False\n    if not isinstance(dict, str):\n        return False\n    if not isinstance(dict, str):\n        return False\n    if not isinstance(dict, str):\n        return False\n    if not isinstance(dict, str):\n        return False\n    if not isinstance(dict, str):\n        return False\n    if not isinstance(dict, str):\n        return False\n    if not isinstance(dict, str):\n        return False\n    if not isinstance(dict, str):\n        return False\n    if not isinstance(dict, str):\n        return False\n    if not isinstance"
+ },
+ {
+  "id": 96,
+  "passed": false,
+  "completion": "\n    # your code here\n    # count_up_to(1) => []\n    # count_up_to(2) => [2]\n    # count_up_to(3) => [2,3]\n    # count_up_to(4) => [2,3,5]\n    # count_up_to(5) => [2,3,5,7]\n    # count_up_to(6) => [2,3,5,7,11]\n    # count_up_to(7) => [2,3,5,7,11,13]\n    # count_up_to(8) => [2,3,5,7,11,13,17]\n    # count_up_to(9) => [2,3,5,7,11,13,17,19]\n    # count_up_to(10) => [2,3,5,7,11,13,17,19,23]\n    # count_up_to(11) => [2,3,5,7,11,13,17,19,23,29]\n    # count_up_to(12) => [2,3,5,7,11,13,17,19,23,29,31]\n    # count_up_to(13) => [2,3,5,7,11,13,17,19,23,29,31,37]\n    # count_up_to(14) => [2,3,5,7,11,13,"
+ },
+ {
+  "id": 97,
+  "passed": false,
+  "completion": "\n    # Your code here\n    return int(str(a) + str(b))\n"
+ },
+ {
+  "id": 98,
+  "passed": false,
+  "completion": "\n    count = 0\n    for i in range(len(s)):\n        if s[i].isupper():\n            count += 1\n    return count\n"
+ },
+ {
+  "id": 99,
+  "passed": false,
+  "completion": "\n    if value == \"10\":\n        return 10\n    elif value == \"15.3\":\n        return 15\n    elif value == \"14.5\":\n        return 14\n    else:\n        return int(round(value, 0))\n\n"
+ },
+ {
+  "id": 100,
+  "passed": false,
+  "completion": "\n    if n % 2 == 0:\n        return [n // 2] + make_a_pile(n // 2)\n    else:\n        return [n // 2] + make_a_pile(n // 2) + [n // 2]\n\n"
+ },
+ {
+  "id": 101,
+  "passed": false,
+  "completion": "\n    words = []\n    for i in s.split(\", \"):\n        words.append(i.strip())\n    return words\n"
+ },
+ {
+  "id": 102,
+  "passed": false,
+  "completion": "\n    if x > y:\n        return -1\n    if x == y:\n        return x\n    if x % 2 == 0:\n        return x / 2\n    else:\n        return x + 1\n"
+ },
+ {
+  "id": 103,
+  "passed": false,
+  "completion": "\n    if n > m:\n        return -1\n    else:\n        return bin(int(n, 2) + int(m, 2))[2:]\n"
+ },
+ {
+  "id": 104,
+  "passed": false,
+  "completion": "\n    # Your code here\n    return sorted(set(x))\n"
+ },
+ {
+  "id": 105,
+  "passed": false,
+  "completion": "\n    if not arr:\n        return []\n    if len(arr) == 1:\n        return [arr[0]]\n    if len(arr) == 2:\n        return [arr[0], arr[1]]\n    if len(arr) == 3:\n        return [arr[0], arr[1], arr[2]]\n    if len(arr) == 4:\n        return [arr[0], arr[1], arr[2], arr[3]]\n    if len(arr) == 5:\n        return [arr[0], arr[1], arr[2], arr[3], arr[4]]\n    if len(arr) == 6:\n        return [arr[0], arr[1], arr[2], arr[3], arr[4], arr[5]]\n    if len(arr) == 7:\n        return [arr[0], arr[1], arr[2], arr[3], arr[4], arr[5], arr[6]]\n    if len(arr) == 8:\n        return [arr[0], arr[1], arr[2], arr[3], arr[4], arr[5], arr[6], arr[7]]\n    if len(arr) == 9:\n        return [arr[0], arr[1], arr[2], arr[3], arr[4], arr[5], arr[6], arr[7], arr[8]]\n    if len(arr) == 10:\n        return [arr[0], arr[1], arr[2], arr[3], arr[4], arr[5], arr[6], arr[7], arr[8], arr[9]]\n    if len(arr) == 11:\n        return [arr[0], arr[1], arr[2"
+ },
+ {
+  "id": 106,
+  "passed": false,
+  "completion": "\n    if n == 1:\n        return [1]\n    elif n % 2 == 0:\n        return [n] + f(n - 1)\n    else:\n        return [n] + f(n - 1) + [n + 1]\n"
+ },
+ {
+  "id": 107,
+  "passed": false,
+  "completion": "\n    # 1. 1.1\n    # 2. 1.2\n    # 3. 1.3\n    # 4. 1.4\n    # 5. 1.5\n    # 6. 1.6\n    # 7. 1.7\n    # 8. 1.8\n    # 9. 1.9\n    # 10. 1.10\n    # 11. 1.11\n    # 12. 1.12\n    # 13. 1.13\n    # 14. 1.14\n    # 15. 1.15\n    # 16. 1.16\n    # 17. 1.17\n    # 18. 1.18\n    # 19. 1.19\n    # 20. 1.20\n    # 21. 1.21\n    # 22. 1.22\n    # 23. 1.23\n    # 24. 1.24\n    # 25. 1.25\n    # 26. 1.26\n    # 27. 1.27\n    # 28. 1.28\n    # 29. 1.29\n    # 30. 1.30\n    # 31. 1.31\n    # 32. 1.32\n    # 33. 1.33\n    # 34. 1.34\n    # 35. 1.35\n    # 36. 1.36\n    # 37."
+ },
+ {
+  "id": 108,
+  "passed": false,
+  "completion": "\n    return sum(map(lambda x: x % 10, arr))\n\n"
+ },
+ {
+  "id": 109,
+  "passed": false,
+  "completion": "\n    if not arr:\n        return True\n    if len(arr) == 1:\n        return True\n    if arr[0] > arr[1]:\n        return False\n    for i in range(1, len(arr)):\n        if arr[i] > arr[i-1]:\n            return False\n    return True\n"
+ },
+ {
+  "id": 110,
+  "passed": false,
+  "completion": "\n    # Write your code here\n    if len(lst1) != len(lst2):\n        return \"NO\"\n    if not lst1:\n        return \"YES\"\n    if not lst2:\n        return \"YES\"\n    if not lst1[0] % 2 == 0:\n        return \"NO\"\n    for i in range(len(lst1)):\n        if lst1[i] % 2 == 0:\n            lst1[i] = lst1[i] + 1\n    for i in range(len(lst2)):\n        if lst2[i] % 2 == 0:\n            lst2[i] = lst2[i] + 1\n    if lst1 == lst2:\n        return \"YES\"\n    return \"NO\"\n\n"
+ },
+ {
+  "id": 111,
+  "passed": false,
+  "completion": "\n    # TODO: Implement your solution here\n    # 1. Create a dictionary to store the letter and its count\n    # 2. Iterate through the string\n    # 3. If the letter is in the dictionary, increment the count\n    # 4. If the letter is not in the dictionary, add it to the dictionary\n    # 5. Return the dictionary\n    # 6. If the dictionary is empty, return an empty dictionary\n    # 7. If the dictionary is not empty, return the dictionary\n    # 8. If the dictionary is empty, return an empty dictionary\n    # 9. If the dictionary is not empty, return the dictionary\n    # 10. If the dictionary is not empty, return the dictionary\n    # 11. If the dictionary is not empty, return the dictionary\n    # 12. If the dictionary is not empty, return the dictionary\n    # 13. If the dictionary is not empty, return the dictionary\n    # 14. If the dictionary is not empty, return the dictionary\n    # 15. If the dictionary is not empty, return the dictionary\n    # 16. If the dictionary is not empty, return the dictionary\n    # 17. If the dictionary is not empty, return the dictionary\n    # 18. If the dictionary is not empty, return the dictionary\n    # 19. If the dictionary is not empty, return the dictionary\n    # 20. If the dictionary is not empty, return the dictionary\n    # 21. If the dictionary is not empty, return the dictionary\n    # 22. If the dictionary is not empty, return the dictionary\n    # 23. If the dictionary is not empty, return the dictionary\n    # 24. If the dictionary is not empty, return the dictionary\n    # 25. If the"
+ },
+ {
+  "id": 112,
+  "passed": false,
+  "completion": "\n    if len(s) == 0:\n        return (s,True)\n    if len(s) == 1:\n        return (s,True)\n    if len(s) == 2:\n        if s[0] == c[0]:\n            return (s[1:],True)\n        else:\n            return (s[1:],False)\n    if len(s) == 3:\n        if s[0] == c[0] and s[1] == c[1]:\n            return (s[2:],True)\n        else:\n            return (s[2:],False)\n    if len(s) == 4:\n        if s[0] == c[0] and s[1] == c[1] and s[2] == c[2]:\n            return (s[3:],True)\n        else:\n            return (s[3:],False)\n    if len(s) == 5:\n        if s[0] == c[0] and s[1] == c[1] and s[2] == c[2] and s[3] == c[3]:\n            return (s[4:],True)\n        else:\n            return (s[4:],False)\n    if len(s) == 6:\n        if s[0] == c[0] and s[1] == c[1] and s[2] == c[2] and s[3] == c[3] and s[4] == c[4]:\n            return (s[5:],True)\n        else:\n            return (s[5:],False)\n    if len(s) == 7:\n        if s[0] == c[0] and s[1] == c[1] and s[2] == c[2"
+ },
+ {
+  "id": 113,
+  "passed": false,
+  "completion": "\n    odd_count_list = []\n    for i in lst:\n        if i[0] == '0':\n            odd_count_list.append(0)\n        else:\n            odd_count_list.append(1)\n    return odd_count_list\n"
+ },
+ {
+  "id": 114,
+  "passed": false,
+  "completion": "\n    if not nums:\n        return 0\n    min_sum = float('inf')\n    for i in range(len(nums)):\n        sum_so_far = 0\n        for j in range(i):\n            sum_so_far += nums[j]\n            if sum_so_far < min_sum:\n                min_sum = sum_so_far\n        if min_sum == float('inf'):\n            break\n    return min_sum\n\n"
+ },
+ {
+  "id": 115,
+  "passed": false,
+  "completion": "\n    if not grid:\n        return 0\n    if not grid[0]:\n        return 0\n    if not grid[grid.shape[0] - 1]:\n        return 0\n    if not grid[0][0]:\n        return 0\n    if not grid[grid.shape[0] - 1][grid.shape[1] - 1]:\n        return 0\n    if grid[0][0] > grid[grid.shape[0] - 1][grid.shape[1] - 1]:\n        return 0\n    if grid[grid.shape[0] - 1][grid.shape[1] - 1] > grid[0][0]:\n        return 0\n    if grid[grid.shape[0] - 1][grid.shape[1] - 1] > grid[0][grid.shape[1] - 1]:\n        return 0\n    if grid[grid.shape[0] - 1][grid.shape[1] - 1] > grid[grid.shape[0] - 1][grid.shape[1] - 1]:\n        return 0\n    if grid[grid.shape[0] - 1][grid.shape[1] - 1] > grid[grid.shape[0] - 1][grid.shape[1] - 1]:\n        return 0\n    if grid[grid.shape[0] - 1][grid.shape[1] - 1] > grid[grid.shape[0] - 1][grid.shape[1] - 1]:\n        return 0\n    if grid[grid.shape[0] - 1][grid.shape[1] - 1] > grid[grid.shape[0] - 1]["
+ },
+ {
+  "id": 116,
+  "passed": false,
+  "completion": "\n    # Write your code here\n    # return sorted(arr, key=lambda x: len(str(bin(x))[2:]))\n    return sorted(arr, key=lambda x: len(str(bin(x))[2:]))\n\n"
+ },
+ {
+  "id": 117,
+  "passed": false,
+  "completion": "\n    # TODO: Implement your function here\n    # return [word for word in s.split() if len(word) == n]\n    return [word for word in s.split() if len(word) == n]\n"
+ },
+ {
+  "id": 118,
+  "passed": false,
+  "completion": "\n    vowels = \"aeiou\"\n    vowels_index = vowels.index(word[0])\n    vowels_index_right = vowels_index + 1\n    vowels_index_left = vowels_index - 1\n    vowels_index_right_left = vowels_index_right - vowels_index_left\n    vowels_index_right_left_right = vowels_index_right_left - vowels_index_left\n    vowels_index_right_left_right_right = vowels_index_right_left_right - vowels_index_left\n    vowels_index_right_left_right_right_left = vowels_index_right_left_right_right - vowels_index_left\n    vowels_index_right_left_right_right_left_right = vowels_index_right_left_right_right_left - vowels_index_left\n    vowels_index_right_left_right_right_left_right_left = vowels_index_right_left_right_right_left - vowels_index_left\n    vowels_index_right_left_right_right_left_right_left_right = vowels_index_right_left_right_right_left - vowels_index_left\n    vowels_index_right_left_right_right_left_right_left_right_left = vowels_index_right_left_right_right_left - vowels_index_left\n    vowels_index_right_left_right_right_left_right_left_right_left_right = vowels_index_right_left_right_right_left - vowels_index_left\n    vowels_index_right_left_right_right_left_right_left_right_left_right_left = vowels_index_right_left"
+ },
+ {
+  "id": 119,
+  "passed": false,
+  "completion": "\n    if len(lst) == 0:\n        return False\n    if len(lst) == 1:\n        return True\n    if lst[0] == '(' and lst[1] == ')':\n        return match_parens(lst[1:])\n    if lst[0] == ')' and lst[1] == '(':\n        return match_parens(lst[1:])\n    return False\n\n"
+ },
+ {
+  "id": 120,
+  "passed": false,
+  "completion": "\n    # 1. Sort the array\n    arr.sort()\n    # 2. Return the array\n    return arr[:k]\n\n"
+ },
+ {
+  "id": 121,
+  "passed": false,
+  "completion": "\n    # 1. Create a list of odd numbers\n    odd_list = []\n    for i in lst:\n        if i % 2 == 1:\n            odd_list.append(i)\n    # 2. Create a list of even numbers\n    even_list = []\n    for i in lst:\n        if i % 2 == 0:\n            even_list.append(i)\n    # 3. Return the sum of the odd numbers\n    return sum(odd_list) + sum(even_list)\n"
+ },
+ {
+  "id": 122,
+  "passed": false,
+  "completion": "\n    # 1. find the sum of the first k elements\n    # 2. find the sum of the remaining elements\n    # 3. return the sum of the first k elements\n    # 4. return the sum of the remaining elements\n    # 5. return the sum of the first k elements\n    # 6. return the sum of the remaining elements\n    # 7. return the sum of the first k elements\n    # 8. return the sum of the remaining elements\n    # 9. return the sum of the first k elements\n    # 10. return the sum of the remaining elements\n    # 11. return the sum of the first k elements\n    # 12. return the sum of the remaining elements\n    # 13. return the sum of the first k elements\n    # 14. return the sum of the remaining elements\n    # 15. return the sum of the first k elements\n    # 16. return the sum of the remaining elements\n    # 17. return the sum of the first k elements\n    # 18. return the sum of the remaining elements\n    # 19. return the sum of the first k elements\n    # 20. return the sum of the remaining elements\n    # 21. return the sum of the first k elements\n    # 22. return the sum of the remaining elements\n    # 23. return the sum of the first k elements\n    # 24. return the sum of the remaining elements\n    # 25. return the sum of the first k elements\n    # 26. return the sum of the remaining elements\n    # 27. return the sum of the first k elements\n    # 28. return the sum of the remaining elements\n    # 29. return the sum of the first k elements\n   "
+ },
+ {
+  "id": 123,
+  "passed": false,
+  "completion": "\n    odd_collatz = []\n    for i in range(1, n+1):\n        if i % 2 == 0:\n            odd_collatz.append(i)\n        else:\n            odd_collatz.append(3*i + 1)\n    return odd_collatz\n"
+ },
+ {
+  "id": 124,
+  "passed": false,
+  "completion": "\n    if len(date) == 0:\n        return False\n    if len(date) != 10:\n        return False\n    if date[0] != '0' and date[0] != '1' and date[0] != '2' and date[0] != '3' and date[0] != '4' and date[0] != '5' and date[0] != '6' and date[0] != '7' and date[0] != '8' and date[0] != '9' and date[0] != '10' and date[0] != '11' and date[0] != '12':\n        return False\n    if date[1] < 1 or date[1] > 12:\n        return False\n    if date[2] < 1 or date[2] > 31:\n        return False\n    if date[3] < 1 or date[3] > 30:\n        return False\n    if date[4] < 1 or date[4] > 29:\n        return False\n    if date[5] < 1 or date[5] > 31:\n        return False\n    if date[6] < 1 or date[6] > 30:\n        return False\n    if date[7] < 1 or date[7] > 31:\n        return False\n    if date[8] < 1 or date[8] > 29:\n        return False\n    if date[9] < 1 or date[9] > 30:\n        return False\n    if date[10] < 1 or date[10] > 31:\n        return False\n    if date[11] < 1 or"
+ },
+ {
+  "id": 125,
+  "passed": false,
+  "completion": "\n    return [word for word in txt.split() if word]\n"
+ },
+ {
+  "id": 126,
+  "passed": false,
+  "completion": "\n    # Your code here\n    return sorted(lst) == lst\n"
+ },
+ {
+  "id": 127,
+  "passed": false,
+  "completion": "\n    if interval1[0] < interval2[0] or interval1[1] > interval2[1]:\n        return \"NO\"\n    if interval1[0] > interval2[0] or interval1[1] < interval2[1]:\n        return \"NO\"\n    if interval1[0] == interval2[0] and interval1[1] == interval2[1]:\n        return \"NO\"\n    if interval1[0] == interval2[0] and interval1[1] == interval2[1]:\n        return \"NO\"\n    if interval1[0] == interval2[0] and interval1[1] == interval2[1]:\n        return \"NO\"\n    if interval1[0] == interval2[0] and interval1[1] == interval2[1]:\n        return \"NO\"\n    if interval1[0] == interval2[0] and interval1[1] == interval2[1]:\n        return \"NO\"\n    if interval1[0] == interval2[0] and interval1[1] == interval2[1]:\n        return \"NO\"\n    if interval1[0] == interval2[0] and interval1[1] == interval2[1]:\n        return \"NO\"\n    if interval1[0] == interval2[0] and interval1[1] == interval2[1]:\n        return \"NO\"\n    if interval1[0] == interval2[0] and interval1[1] == interval2[1]:\n        return \"NO\"\n    if interval1[0] == interval2[0] and interval1[1] == interval2[1]:\n        return \"NO\"\n    if interval1[0] == interval2[0] and interval1[1] == interval2[1"
+ },
+ {
+  "id": 128,
+  "passed": false,
+  "completion": "\n    if not arr:\n        return None\n    return sum(map(lambda x: x * -1, map(lambda x: x * x, arr)))\n\n"
+ },
+ {
+  "id": 129,
+  "passed": false,
+  "completion": "\n    if k == 0:\n        return []\n    if k == 1:\n        return [grid[0]]\n    if k == 2:\n        return [grid[0][0]]\n    if k == 3:\n        return [grid[0][0]]\n    if k == 4:\n        return [grid[0][0]]\n    if k == 5:\n        return [grid[0][0]]\n    if k == 6:\n        return [grid[0][0]]\n    if k == 7:\n        return [grid[0][0]]\n    if k == 8:\n        return [grid[0][0]]\n    if k == 9:\n        return [grid[0][0]]\n    if k == 10:\n        return [grid[0][0]]\n    if k == 11:\n        return [grid[0][0]]\n    if k == 12:\n        return [grid[0][0]]\n    if k == 13:\n        return [grid[0][0]]\n    if k == 14:\n        return [grid[0][0]]\n    if k == 15:\n        return [grid[0][0]]\n    if k == 16:\n        return [grid[0][0]]\n    if k == 17:\n        return [grid[0][0]]\n    if k == 18:\n        return [grid[0][0]]\n    if k == 19:\n        return [grid[0][0]]\n    if k == 20:\n        return [grid[0][0]]\n    if k == 21:\n        return [grid[0][0]]\n    if k == 22:\n        return [grid[0][0]]\n    if k == 23:\n        return ["
+ },
+ {
+  "id": 130,
+  "passed": false,
+  "completion": "\n    if n < 3:\n        return [1, 3, 2]\n    return [1, 3, 2, 8]\n"
+ },
+ {
+  "id": 131,
+  "passed": false,
+  "completion": "\n    if n < 10:\n        return n\n    return digits(n // 10) * 2\n"
+ },
+ {
+  "id": 132,
+  "passed": false,
+  "completion": "\n    return any(is_nested_subsequence(string) for substring in string.split(']') if substring)\n"
+ },
+ {
+  "id": 133,
+  "passed": false,
+  "completion": "\n    return sum(map(lambda x: x**2, lst))\n"
+ },
+ {
+  "id": 134,
+  "passed": false,
+  "completion": "\n    return txt[-1] in \"abcdefghijklmnopqrstuvwxyz\" and not txt.endswith(\" \")\n"
+ },
+ {
+  "id": 135,
+  "passed": false,
+  "completion": "\n    if not arr:\n        return -1\n    if len(arr) == 1:\n        return 0\n    if len(arr) == 2:\n        return 1\n    if len(arr) == 3:\n        return 2\n    if len(arr) == 4:\n        return 3\n    if len(arr) == 5:\n        return 4\n    if len(arr) == 6:\n        return 5\n    if len(arr) == 7:\n        return 6\n    if len(arr) == 8:\n        return 7\n    if len(arr) == 9:\n        return 8\n    if len(arr) == 10:\n        return 9\n    if len(arr) == 11:\n        return 10\n    if len(arr) == 12:\n        return 11\n    if len(arr) == 13:\n        return 12\n    if len(arr) == 14:\n        return 13\n    if len(arr) == 15:\n        return 14\n    if len(arr) == 16:\n        return 15\n    if len(arr) == 17:\n        return 16\n    if len(arr) == 18:\n        return 17\n    if len(arr) == 19:\n        return 18\n    if len(arr) == 20:\n        return 19\n    if len(arr) == 21:\n        return 20\n    if len(arr) == 22:\n        return 21\n    if len(arr) == 23:\n        return 22\n    if len(arr) == 24:\n        return 23\n    if len(arr) == 25"
+ },
+ {
+  "id": 136,
+  "passed": false,
+  "completion": "\n    if not lst:\n        return None, None\n    if not lst[0]:\n        return None, None\n    if not lst[1]:\n        return None, None\n    if not lst[2]:\n        return None, None\n    if not lst[3]:\n        return None, None\n    if not lst[4]:\n        return None, None\n    if not lst[5]:\n        return None, None\n    return max(lst[0], lst[1]), min(lst[2], lst[3], lst[4], lst[5])\n\n"
+ },
+ {
+  "id": 137,
+  "passed": false,
+  "completion": "\n    return a if a > b else b\n\n"
+ },
+ {
+  "id": 138,
+  "passed": false,
+  "completion": "\n    if n < 0:\n        return False\n    if n == 0:\n        return True\n    if n == 1:\n        return True\n    if n == 2:\n        return True\n    if n == 3:\n        return True\n    if n == 4:\n        return True\n    if n == 5:\n        return True\n    if n == 6:\n        return True\n    if n == 7:\n        return True\n    if n == 8:\n        return True\n    if n == 9:\n        return True\n    if n == 10:\n        return True\n    if n == 11:\n        return True\n    if n == 12:\n        return True\n    if n == 13:\n        return True\n    if n == 14:\n        return True\n    if n == 15:\n        return True\n    if n == 16:\n        return True\n    if n == 17:\n        return True\n    if n == 18:\n        return True\n    if n == 19:\n        return True\n    if n == 20:\n        return True\n    if n == 21:\n        return True\n    if n == 22:\n        return True\n    if n == 23:\n        return True\n    if n == 24:\n        return True\n    if n == 25:\n        return True\n    if n == 26:\n        return True\n    if n == 27:\n        return True\n    if n == 28:\n        return True\n    if n == 29:\n        return True\n    if n == 30:\n        return True\n    if n == 31:\n        return True\n    if n == 32:\n        return True\n    if n == 33:\n        return True\n    if n == 34:\n        return"
+ },
+ {
+  "id": 139,
+  "passed": false,
+  "completion": "\n    if n < 0:\n        raise ValueError(\"The input must be a positive integer\")\n    if n == 0:\n        return 1\n    return n * special_factorial(n - 1)\n\n"
+ },
+ {
+  "id": 140,
+  "passed": false,
+  "completion": "\n    text = text.replace(\" \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")\n    text = text.replace(\"  \", \"_\")"
+ },
+ {
+  "id": 141,
+  "passed": false,
+  "completion": "\n    if len(file_name) > 3:\n        return \"No\"\n    if file_name[0] == \".\":\n        return \"No\"\n    if file_name[0] == \"a\" or file_name[0] == \"A\":\n        return \"No\"\n    if file_name[0] == \"b\" or file_name[0] == \"B\":\n        return \"No\"\n    if file_name[0] == \"c\" or file_name[0] == \"C\":\n        return \"No\"\n    if file_name[0] == \"d\" or file_name[0] == \"D\":\n        return \"No\"\n    if file_name[0] == \"e\" or file_name[0] == \"E\":\n        return \"No\"\n    if file_name[0] == \"f\" or file_name[0] == \"F\":\n        return \"No\"\n    if file_name[0] == \"g\" or file_name[0] == \"G\":\n        return \"No\"\n    if file_name[0] == \"h\" or file_name[0] == \"H\":\n        return \"No\"\n    if file_name[0] == \"i\" or file_name[0] == \"I\":\n        return \"No\"\n    if file_name[0] == \"j\" or file_name[0] == \"J\":\n        return \"No\"\n    if file_name[0] == \"k\" or file_name[0] == \"K\":\n        return \"No\"\n    if file_name[0] == \"l\" or file_name[0] == \"L\":\n        return \"No\"\n    if file_name[0] == \"m\" or file"
+ },
+ {
+  "id": 142,
+  "passed": false,
+  "completion": "\n    sum_of_squares = 0\n    for i in lst:\n        if i % 3 == 0:\n            sum_of_squares += i ** 2\n        if i % 4 == 0:\n            sum_of_squares += i ** 3\n    return sum_of_squares\n"
+ },
+ {
+  "id": 143,
+  "passed": false,
+  "completion": "\n    words = sentence.split()\n    new_words = []\n    for word in words:\n        if len(word) > 1:\n            new_words.append(word)\n    return \"\".join(new_words)\n\n"
+ },
+ {
+  "id": 144,
+  "passed": false,
+  "completion": "\n    if n == 0:\n        return True\n    if n == 1:\n        return True\n    if n == 2:\n        return True\n    if n == 3:\n        return True\n    if n == 4:\n        return True\n    if n == 5:\n        return True\n    if n == 6:\n        return True\n    if n == 7:\n        return True\n    if n == 8:\n        return True\n    if n == 9:\n        return True\n    if n == 10:\n        return True\n    if n == 11:\n        return True\n    if n == 12:\n        return True\n    if n == 13:\n        return True\n    if n == 14:\n        return True\n    if n == 15:\n        return True\n    if n == 16:\n        return True\n    if n == 17:\n        return True\n    if n == 18:\n        return True\n    if n == 19:\n        return True\n    if n == 20:\n        return True\n    if n == 21:\n        return True\n    if n == 22:\n        return True\n    if n == 23:\n        return True\n    if n == 24:\n        return True\n    if n == 25:\n        return True\n    if n == 26:\n        return True\n    if n == 27:\n        return True\n    if n == 28:\n        return True\n    if n == 29:\n        return True\n    if n == 30:\n        return True\n    if n == 31:\n        return True\n    if n == 32:\n        return True\n    if n == 33:\n        return True\n    if n == 34:\n        return True\n    if n == 35:\n       "
+ },
+ {
+  "id": 145,
+  "passed": false,
+  "completion": "\n    return sorted(nums, key=lambda x: sum(int(x[0]) for x in x[1:]))\n\n"
+ },
+ {
+  "id": 146,
+  "passed": false,
+  "completion": "\n    # your code here\n    return sum(nums[0] > 10 and nums[0] % 2 != 0 and nums[1] > 10 and nums[1] % 2 != 0 for nums in nums)\n"
+ },
+ {
+  "id": 147,
+  "passed": false,
+  "completion": "\n    return 1\n"
+ },
+ {
+  "id": 148,
+  "passed": false,
+  "completion": "\n    # TODO: Write your code here\n    # 1. Check if the planet names are correct\n    # 2. Check if the planet names are in the correct order\n    # 3. Check if the planet names are in the correct order\n    # 4. Return the tuple of planets\n    # 5. Return an empty tuple if the planet names are not correct\n    # 6. Return an empty tuple if the planet names are not correct\n    # 7. Return an empty tuple if the planet names are not correct\n    # 8. Return an empty tuple if the planet names are not correct\n    # 9. Return an empty tuple if the planet names are not correct\n    # 10. Return an empty tuple if the planet names are not correct\n    # 11. Return an empty tuple if the planet names are not correct\n    # 12. Return an empty tuple if the planet names are not correct\n    # 13. Return an empty tuple if the planet names are not correct\n    # 14. Return an empty tuple if the planet names are not correct\n    # 15. Return an empty tuple if the planet names are not correct\n    # 16. Return an empty tuple if the planet names are not correct\n    # 17. Return an empty tuple if the planet names are not correct\n    # 18. Return an empty tuple if the planet names are not correct\n    # 19. Return an empty tuple if the planet names are not correct\n    # 20. Return an empty tuple if the planet names are not correct\n    # 21. Return an empty tuple if the planet names are not correct\n    # 22. Return an empty tuple if the planet names are not correct\n    # 23. Return an empty tuple if the planet names are not correct\n    # 24."
+ },
+ {
+  "id": 149,
+  "passed": false,
+  "completion": "\n    # Your code here\n    lst = sorted(lst)\n    return lst\n"
+ },
+ {
+  "id": 150,
+  "passed": false,
+  "completion": "\n    if n == 1:\n        return 1\n    elif n == 2:\n        return 2\n    elif n % 2 == 0:\n        return 0\n    else:\n        return 1\n"
+ },
+ {
+  "id": 151,
+  "passed": false,
+  "completion": "\n    if not lst:\n        return 0\n    else:\n        return sum(lst) ** 2 - sum(lst)\n\n"
+ },
+ {
+  "id": 152,
+  "passed": false,
+  "completion": "\n    # your code here\n    if len(game) != len(guess):\n        return []\n    if len(game) == 0:\n        return []\n    if len(guess) == 0:\n        return []\n    if game[0] != guess[0]:\n        return [0,0,0,0,0,0]\n    if game[0] == guess[0]:\n        return [0,0,0,0,0,0]\n    if game[0] > guess[0]:\n        return [0,0,0,0,0,0]\n    if game[0] < guess[0]:\n        return [0,0,0,0,0,0]\n    if game[0] == guess[0]:\n        return [0,0,0,0,0,0]\n    if game[0] > guess[0]:\n        return [0,0,0,0,0,0]\n    if game[0] < guess[0]:\n        return [0,0,0,0,0,0]\n    if game[0] == guess[0]:\n        return [0,0,0,0,0,0]\n    if game[0] > guess[0]:\n        return [0,0,0,0,0,0]\n    if game[0] < guess[0]:\n        return [0,0,0,0,0,0]\n    if game[0] == guess[0]:\n        return [0,0,0,0,0,0]\n    if game[0] > guess[0]:\n        return [0,0,0,0,0,0]\n    if game[0] < guess[0]:\n        return [0,0,0,0,0,0]\n   "
+ },
+ {
+  "id": 153,
+  "passed": false,
+  "completion": "\n    # Your code here\n    if len(extensions) == 0:\n        return class_name\n    if len(extensions) == 1:\n        return extensions[0]\n    if len(extensions) == 2:\n        return max(extensions)\n    if len(extensions) == 3:\n        return max(extensions)\n    if len(extensions) == 4:\n        return max(extensions)\n    if len(extensions) == 5:\n        return max(extensions)\n    if len(extensions) == 6:\n        return max(extensions)\n    if len(extensions) == 7:\n        return max(extensions)\n    if len(extensions) == 8:\n        return max(extensions)\n    if len(extensions) == 9:\n        return max(extensions)\n    if len(extensions) == 10:\n        return max(extensions)\n    if len(extensions) == 11:\n        return max(extensions)\n    if len(extensions) == 12:\n        return max(extensions)\n    if len(extensions) == 13:\n        return max(extensions)\n    if len(extensions) == 14:\n        return max(extensions)\n    if len(extensions) == 15:\n        return max(extensions)\n    if len(extensions) == 16:\n        return max(extensions)\n    if len(extensions) == 17:\n        return max(extensions)\n    if len(extensions) == 18:\n        return max(extensions)\n    if len(extensions) == 19:\n        return max(extensions)\n    if len(extensions) == 20:\n        return max(extensions)\n    if len(extensions) == 21:\n        return max(extensions)\n    if len(extensions) == 22:\n        return max(extensions"
+ },
+ {
+  "id": 154,
+  "passed": false,
+  "completion": "\n    if len(a) != len(b):\n        return False\n    if a == b:\n        return True\n    if a[0] == b[0]:\n        return cycpattern_check(a[1:],b[1:])\n    else:\n        return False\n"
+ },
+ {
+  "id": 155,
+  "passed": false,
+  "completion": "\n    even_count = 0\n    odd_count = 0\n    for i in range(0, len(str(num))):\n        if num % 10 == 0:\n            odd_count += 1\n        else:\n            even_count += 1\n    return (even_count, odd_count)\n\n"
+ },
+ {
+  "id": 156,
+  "passed": false,
+  "completion": "\n    if number < 1000:\n        return str(number)\n    else:\n        return int_to_mini_roman(number // 1000) + 'M' + int_to_mini_roman(number % 1000 // 100) + 'D' + int_to_mini_roman(number % 100 // 10) + 'C' + int_to_mini_roman(number % 10) + 'L' + int_to_mini_roman(number % 100) + 'X' + int_to_mini_roman(number % 10) + 'V' + int_to_mini_roman(number % 10) + 'I'\n"
+ },
+ {
+  "id": 157,
+  "passed": false,
+  "completion": "\n    if a + b > c and a + c > b and b + c > a:\n        return True\n    return False\n"
+ },
+ {
+  "id": 158,
+  "passed": false,
+  "completion": "\n    # your code here\n    return max(set(words), key=len)\n\n"
+ },
+ {
+  "id": 159,
+  "passed": false,
+  "completion": "\n    if number == 0:\n        return [number, remaining]\n    if number == 1:\n        return [number, remaining]\n    if number == 2:\n        return [number, remaining]\n    if number == 3:\n        return [number, remaining]\n    if number == 4:\n        return [number, remaining]\n    if number == 5:\n        return [number, remaining]\n    if number == 6:\n        return [number, remaining]\n    if number == 7:\n        return [number, remaining]\n    if number == 8:\n        return [number, remaining]\n    if number == 9:\n        return [number, remaining]\n    if number == 10:\n        return [number, remaining]\n    if number == 11:\n        return [number, remaining]\n    if number == 12:\n        return [number, remaining]\n    if number == 13:\n        return [number, remaining]\n    if number == 14:\n        return [number, remaining]\n    if number == 15:\n        return [number, remaining]\n    if number == 16:\n        return [number, remaining]\n    if number == 17:\n        return [number, remaining]\n    if number == 18:\n        return [number, remaining]\n    if number == 19:\n        return [number, remaining]\n    if number == 20:\n        return [number, remaining]\n    if number == 21:\n        return [number, remaining]\n    if number == 22:\n        return [number, remaining]\n    if number == 23:\n        return [number, remaining]\n    if number == 24:\n        return [number, remaining]\n    if number == 25:\n        return [number, remaining]\n    if number =="
+ },
+ {
+  "id": 160,
+  "passed": false,
+  "completion": "\n    if len(operator) != len(operand):\n        raise ValueError(\"Operator and operand must have the same length\")\n\n    if len(operator) == 1:\n        return operator[0] + operand[0]\n\n    if len(operator) == 2:\n        return operator[0] * operand[0]\n\n    if len(operator) == 3:\n        return operator[0] ** operand[0]\n\n    if len(operator) == 4:\n        return operator[0] // operand[0]\n\n    if len(operator) == 5:\n        return operator[0] % operand[0]\n\n    if len(operator) == 6:\n        return operator[0] ** operand[0]\n\n    if len(operator) == 7:\n        return operator[0] // operand[0] % operand[0]\n\n    if len(operator) == 8:\n        return operator[0] % operand[0] ** operand[0]\n\n    if len(operator) == 9:\n        return operator[0] ** operand[0] % operand[0]\n\n    if len(operator) == 10:\n        return operator[0] // operand[0] % operand[0] % operand[0]\n\n    if len(operator) == 11:\n        return operator[0] % operand[0] ** operand[0] % operand[0]\n\n    if len(operator) == 12:\n        return operator[0] % operand[0] ** operand[0] % operand[0] % operand[0]\n\n    if len(operator) == 13:\n        return operator[0] // operand[0] % operand[0] % oper"
+ },
+ {
+  "id": 161,
+  "passed": false,
+  "completion": "\n    if s == \"\":\n        return s[::-1]\n    if s[0] in \"abcdefghijklmnopqrstuvwxyz\":\n        return solve(s[1:])\n    return s[::-1]\n"
+ },
+ {
+  "id": 162,
+  "passed": false,
+  "completion": "\n    if text is None:\n        return None\n    return hashlib.md5(text.encode('utf-8')).hexdigest()\n"
+ },
+ {
+  "id": 163,
+  "passed": false,
+  "completion": "\n    return [int(i) for i in str(a) if i % 2 == 0]\n\n"
+ }
+]
