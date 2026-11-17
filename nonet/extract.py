@@ -5,6 +5,56 @@ Only the prompt text is used. Never the hidden tests or reference solution.
 import ast
 import re
 
+# A line that looks like an example (call, arrow, doctest, Input/Output header, ...).
+EXLINE = re.compile(r">>>|==>|=>|➞|->|output|input|for example|e\.g\.|should return|\w+\(.*\)\s*(==|=|returns?)", re.I)
+# A line that opens an example span: following data-like lines are example data too. Weaker EXLINE hits
+# (e.g. "...can output a list...") only exclude their own line, so a spec table after them stays prose.
+EXSTART = re.compile(r">>>|==>|=>|➞|^\s*(examples?|explanation|input|output|for example)\b", re.I)
+
+
+def _looks_like_data(s):
+    """Inside an example span: is this line example data (kept out of prose) rather than a sentence?
+    Conservative: anything that is not clearly a sentence counts as data."""
+    s = s.strip()
+    if "=" in s or re.match(r"^[\w\s]{1,30}:", s):  # name = value, name: value, "Note: ..."
+        return True
+    try:
+        ast.literal_eval(s.rstrip(",;"))
+        return True
+    except Exception:
+        pass
+    return len(re.findall(r"[A-Za-z]{2,}", s)) < 4
+
+
+def classify_doc(doc, entry, ex_lines=()):
+    """Label each docstring line 'prose', 'example' or 'blank'.
+
+    Example lines: lines the example extractor consumed (`ex_lines`), lines matching EXLINE/EXSTART or
+    naming the function, and data-like continuation lines that follow them until a blank line or a sentence.
+    """
+    kinds, in_ex = [], False
+    ent = re.compile(r"\b" + re.escape(entry) + r"\b") if entry else None
+    for i, l in enumerate(doc.split("\n")):
+        if not l.strip():
+            kinds.append("blank")
+            in_ex = False
+        elif i in ex_lines or EXSTART.search(l) or (ent and ent.search(l)):
+            kinds.append("example")
+            in_ex = True
+        elif EXLINE.search(l):
+            kinds.append("example")
+        elif in_ex and _looks_like_data(l):
+            kinds.append("example")
+        else:
+            kinds.append("prose")
+            in_ex = False
+    return kinds
+
+
+def prose_text(doc, entry, ex_lines=()):
+    return "\n".join(l for l, k in zip(doc.split("\n"), classify_doc(doc, entry, ex_lines)) if k == "prose")
+
+
 ARROWS = ["==>", "=>", "➞", "->", "==", "should return", "returns", "return", "=", "is", ":"]
 
 
@@ -77,20 +127,30 @@ def parse_prompt(prompt, entry):
 
 def extract_examples(prompt, entry):
     info = parse_prompt(prompt, entry)
-    exs = _extract(info, entry)
+    spans = []
+    exs = _extract(info, entry, spans)
     if not exs:  # docstring may call the function by another name
         names = set(re.findall(r"\b([A-Za-z_]\w*)\s*\(", info["doc"]))
         for nm in sorted(names):
-            exs = _extract(info, nm)
+            exs = _extract(info, nm, spans)
             if exs:
                 break
+    # doc line indices of every example-like match (accepted or not); these are never prose
+    doc = info["doc"]
+    info["ex_lines"] = {ln for a, b in spans for ln in range(doc.count("\n", 0, a), doc.count("\n", 0, max(a, b - 1)) + 1)}
     return info, exs
 
 
-def _extract(info, entry):
+def _line_end(doc, i):
+    j = doc.find("\n", i)
+    return len(doc) if j < 0 else j
+
+
+def _extract(info, entry, spans=None):
     doc = info["doc"]
     exs = []
     seen = set()
+    spans = [] if spans is None else spans
     for m in re.finditer(r"\b" + re.escape(entry) + r"\s*\(", doc):
         start = m.end() - 1
         end = _balanced(doc, start)
@@ -105,6 +165,8 @@ def _extract(info, entry):
         except Exception:
             continue
         rest = doc[end:]
+        nl = _line_end(doc, end)
+        spans.append((m.start(), _line_end(doc, nl + 1) if doc[end:nl].strip() == "" else nl))
         out, ok = None, False
         # doctest style: result on next non-empty line
         stripped = rest.lstrip(" \t")
@@ -134,6 +196,7 @@ def _extract(info, entry):
                 exs.append((inputs, out))
     # "Input: ... Output: ..." style blocks
     for m in re.finditer(r"Input:\s*(.+?)\n\s*Output:\s*(.+?)(\n|$)", doc):
+        spans.append((m.start(), m.end()))
         try:
             src = m.group(1).strip()
             if "=" in src:
@@ -151,6 +214,7 @@ def _extract(info, entry):
             pass
     # "For lst = [..] the output should be 10"
     for m in re.finditer(r"[Ff]or\s+(.+?)\s*,?\s+the output should be\s+(.+)", doc):
+        spans.append((m.start(), m.end()))
         try:
             parts = re.split(r",\s*(?=\w+\s*=)", m.group(1).strip())
             inputs = [ast.literal_eval(p.split("=", 1)[1].strip()) for p in parts]
@@ -164,6 +228,7 @@ def _extract(info, entry):
             pass
     # multi-line "Input:\n name : value\n name : value\n Output: v"
     for m in re.finditer(r"Input:\s*\n((?:\s*\w+\s*[:=].+\n)+)\s*Output:\s*(.+)", doc):
+        spans.append((m.start(), m.end()))
         try:
             lines = [l for l in m.group(1).split("\n") if l.strip()]
             inputs = [ast.literal_eval(re.split(r"[:=]", l, 1)[1].strip()) for l in lines]

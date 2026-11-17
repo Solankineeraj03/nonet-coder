@@ -78,7 +78,12 @@ nonet-coder/
 
 `run_eval.py:work()` → `nonet.synth.synthesize(prompt, entry, budget)` → returns
 `(program_source, chosen_expr, how, n_examples)`. Then `run_eval.py` appends the HumanEval `test`
-code and `check(entry)`, and runs it in a `python -I` subprocess with a 15 s timeout.
+code and `check(entry)`, and runs it via `python -I nonet/sandbox_runner.py --script <file>` (15 s CPU limit, 15 s wall
+timeout; the wall timeout usually binds first), because a retrieved program embeds MBPP code (rule 5).
+Each result records a `reason` (pass/assert/exception/cpu-limit/wall-timeout/runner-error), and
+`--out X.json` also writes `X.meta.json` (commit, Python, data hashes, budget, workers, wall time).
+`--ab-scorer` additionally scores with the pre-v5 plain subprocess for comparison. These are resource
+limits, **not** an OS security sandbox: MBPP code can still reach the filesystem and network.
 
 ### 4.1 `nonet/extract.py`: examples from the docstring
 - `parse_prompt(prompt, entry)` (line 64) → `{"args", "ann", "ret", "doc", "helpers"}`, using
@@ -110,8 +115,12 @@ code and `check(entry)`, and runs it in a `python -I` subprocess with a 15 s tim
   it becomes `ERR`. `grow(cost)` (line 324) generates every unary, binary and ternary term at that
   exact cost. `target_hook` sees **every** candidate, including OE duplicates, so semantically
   different programs that happen to agree on the examples are all recorded as candidates.
-- **Constants:** `doc_constants()` (line 406) reads prose only, after `EXLINE` (line 403) strips the
-  example lines. `BASE_CONSTS` is at line 428 and `seed()` at line 432.
+- **Constants:** `doc_constants()` reads prose spans only. The prose/example split is
+  `extract.classify_doc()`, which is shared with extraction: every doc line the extractor consumed
+  (`info["ex_lines"]`) is an example line, and strong markers (`>>>`, arrows, `Input:`/`Output:`/
+  `Example`/`Explanation` headers, the function name) open a span that continues over data-like lines
+  until a blank line or a sentence. Example outputs are never added as constants. Known gap: the number
+  regex skips a number directly followed by `.` (e.g. "base 7."). `BASE_CONSTS` is at line 428 and `seed()` at line 432.
 - **Probes:** `mutate()` (line 440) perturbs the example inputs deterministically.
   `Synth.probes()` (line 471) returns up to 6 probes. Probes have no known outputs; they are used
   only to penalize candidates that crash or return the wrong type.
@@ -167,7 +176,8 @@ inputs. Keep it generic.
 
 ```bash
 cd ~/nonet-coder
-python3 lint_rules.py                                   # must print "lint OK"
+python3 lint_rules.py                                   # static checks only; must print "lint OK"
+python3 -m unittest discover tests                      # regression tests (stdlib only)
 python3 train_prior.py                                  # rebuild data/prior.json
 python3 run_eval.py --split dev --budget 10 --out results_dev_vN.json
 python3 run_eval.py --only 0,12,51 --budget 10          # specific problem ids
@@ -204,9 +214,8 @@ python3 run_eval.py --only 0,12,51 --budget 10          # specific problem ids
 2. **Overfitting defenses.** Check probe outputs against constraints stated in the docstring
    (return annotation such as `-> bool` or `List[int]`, "sorted", "non-negative") and penalize
    violations in `rank_key`.
-3. **The KeyError.** It crashed the synthesizer on 2 test problems (`how == "error:KeyError"` in
-   `results_test_checkpoint1.json`). Reproduce it on dev-like inputs and fix it; don't debug by
-   reading test problems.
+3. ~~**The KeyError.**~~ Fixed in v5: `prior.prob` assumed every `wc` word had a `cond` entry
+   (5 words don't). Reproduced on dev 101/152; regression test in `tests/`.
 4. **Timeouts (25 on test).** Profile `Bank.grow` and try `--budget 30`. Speed ideas: index terms by
    tag, and cache `repr` keys.
 5. **No-example problems (9 on test).** Add more extraction formats, or fall back to retrieval

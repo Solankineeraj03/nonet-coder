@@ -28,7 +28,7 @@ def prob(op, words, kw_hit):
         n = _P["wc"].get(w)
         if not n:
             continue
-        c = _P["cond"][w].get(op, 0)
+        c = _P["cond"].get(w, {}).get(op, 0)  # a word may be counted in wc yet co-occur with no op
         pw = (c + ALPHA * base) / (n + ALPHA)
         if pw > p:
             p = pw

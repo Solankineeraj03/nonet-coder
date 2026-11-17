@@ -41,7 +41,34 @@ def timed(fn, t):
         signal.setitimer(signal.ITIMER_REAL, 0)
 
 
+def run_script(path, cpu=15):
+    """Scoring mode: execute a complete program (which may embed MBPP code) under a CPU limit.
+
+    Exit status: 0 completed, 1 AssertionError, 2 any other exception, 3 runner could not load the file.
+    Exceeding the CPU limit kills the process with SIGXCPU (negative return code in the parent).
+    These are resource limits on a separate interpreter, NOT an OS security sandbox: the program can
+    still touch the filesystem and network.
+    """
+    resource.setrlimit(resource.RLIMIT_CPU, (cpu, cpu))
+    try:
+        src = open(path).read()
+        code = compile(src, path, "exec")
+    except BaseException:
+        sys.exit(3)
+    sys.stdin = None
+    sys.stdout = open("/dev/null", "w")
+    try:
+        exec(code, {"__name__": "__main__"})
+    except AssertionError:
+        sys.exit(1)
+    except BaseException:
+        sys.exit(2)
+    sys.exit(0)
+
+
 def main():
+    if len(sys.argv) in (3, 4) and sys.argv[1] == "--script":  # --script FILE [CPU_SECONDS]
+        run_script(sys.argv[2], int(sys.argv[3]) if len(sys.argv) == 4 else 15)
     resource.setrlimit(resource.RLIMIT_CPU, (20, 20))
     signal.signal(signal.SIGALRM, alarm)
     job = ast.literal_eval(sys.stdin.read())

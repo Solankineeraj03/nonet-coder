@@ -7,7 +7,7 @@ import math
 import re
 import time
 
-from .extract import extract_examples
+from .extract import EXLINE, extract_examples, prose_text  # EXLINE re-exported for retrieve.py
 from .lib import LIB_SRC
 from .prior import cost as prior_cost, doc_words
 
@@ -400,12 +400,9 @@ class Bank:
         return False
 
 
-EXLINE = re.compile(r">>>|==>|=>|➞|->|output|input|for example|e\.g\.|should return|\w+\(.*\)\s*(==|=|returns?)", re.I)
-
-
-def doc_constants(doc, examples, entry):
-    """Constants from the prose only (never from example lines) to avoid copying answers."""
-    prose = "\n".join(l for l in doc.split("\n") if not EXLINE.search(l) and entry not in l)
+def doc_constants(doc, examples, entry, ex_lines=()):
+    """Constants from prose spans only (see extract.classify_doc); never from example lines or outputs."""
+    prose = prose_text(doc, entry, ex_lines)
     nums, strs = set(), set()
     for m in re.finditer(r"(?<![\w.])-?\d+(?:\.\d+)?(?![\w.])", prose):
         try:
@@ -418,10 +415,10 @@ def doc_constants(doc, examples, entry):
         strs.add(m.group(1) if m.group(1) is not None else m.group(2))
     outvals = {repr(o) for _, o in examples}
     nums = {v for v in nums if repr(v) not in outvals and repr(float(v)) not in outvals and v not in (0, 1, 2)}
-    strs = {x for x in strs if repr(x) not in outvals}
-    souts = [o for _, o in examples if isinstance(o, str)]
-    if souts and len(set(souts)) <= 2 and all(len(o) <= 8 for o in souts):
-        strs |= set(souts)  # categorical answers like 'YES'/'NO'
+    # Example outputs are NEVER a source of constants (AGENTS.md rule 6). A short quoted label the prose
+    # itself states (e.g. "return 'YES' if ...") is prose-derived, so it is kept even if an output equals it;
+    # longer prose strings that equal an output are dropped as likely leaked example text.
+    strs = {x for x in strs if repr(x) not in outvals or len(x) <= 8}
     return nums, strs
 
 
@@ -495,7 +492,7 @@ class Synth:
         N = len(inputs)
         real = [True] * n + [False] * (N - n)
         self.N, self.real = N, real
-        nums, strs = doc_constants(self.info["doc"], ex, self.entry)
+        nums, strs = doc_constants(self.info["doc"], ex, self.entry, self.info.get("ex_lines", ()))
         out_tags = {tag(o) for o in outs}
 
         top = Bank(N, self.doc, deadline, real=real, banned=self.banned)
