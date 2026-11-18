@@ -1,0 +1,27 @@
+{
+ "commit": "5c483ec51476f8a3284b622a25f489abe09b8ef6",
+ "dirty": false,
+ "python": "3.10.0",
+ "platform": "macOS-15.1.1-arm64-arm-64bit",
+ "machine": "arm64",
+ "cpu_count": 8,
+ "workers": 4,
+ "budget": 10.0,
+ "budget_unit": "enumeration process CPU seconds; retrieval separate",
+ "split": "dev",
+ "n": 27,
+ "retrieval_limits": "20 CPU seconds per subprocess; 0.3 CPU seconds per call; 120s wall watchdog",
+ "scorer": "sandbox_runner --script (RLIMIT_CPU 15s, wall watchdog 120s)",
+ "ab_scorer": false,
+ "trace_candidates": true,
+ "candidate_limit": 0,
+ "only": "4,6,19,39,43,47,56,61,68,71,73,74,76,92,95,99,108,109,115,121,123,132,134,138,139,146,158",
+ "data_sha256_16": {
+  "data/HumanEval.jsonl": "1d49078ba3e2b196",
+  "data/mbpp.jsonl": "ccf64ceae9c5403b",
+  "data/prior.json": "1e6999377c35e589",
+  "data/split.json": "662854235462798d"
+ },
+ "started": "2026-11-18T00:36:32-0500",
+ "wall_secs": 59.1
+}
