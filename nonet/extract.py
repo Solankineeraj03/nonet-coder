@@ -3,6 +3,7 @@
 Only the prompt text is used. Never the hidden tests or reference solution.
 """
 import ast
+import inspect
 import re
 
 # A line that looks like an example (call, arrow, doctest, Input/Output header, ...).
@@ -120,7 +121,17 @@ def parse_prompt(prompt, entry):
     args = [a.arg for a in fn.args.args]
     ann = [ast.unparse(a.annotation) if a.annotation else None for a in fn.args.args]
     ret = ast.unparse(fn.returns) if fn.returns else None
-    doc = ast.get_docstring(fn) or ""
+    doc = ast.get_docstring(fn)
+    if doc is None:
+        # Some prompts put imports before the descriptive string inside the function.
+        # Accept a string after leading imports, but not arbitrary executable statements.
+        for stmt in fn.body:
+            if isinstance(stmt, (ast.Import, ast.ImportFrom)):
+                continue
+            if isinstance(stmt, ast.Expr) and isinstance(stmt.value, ast.Constant) and isinstance(stmt.value.value, str):
+                doc = inspect.cleandoc(stmt.value.value)
+            break
+    doc = doc or ""
     return {"args": args, "ann": ann, "ret": ret, "doc": doc, "helpers": [
         n.name for n in tree.body if isinstance(n, ast.FunctionDef) and n.name != entry]}
 

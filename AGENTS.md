@@ -12,7 +12,7 @@ NoNet Coder writes the body of a Python function from its signature and docstrin
 2. **A learned cost prior.** The prior is plain word/component co-occurrence counts from MBPP
    solutions. It decides which components are cheap for a given docstring.
 3. **Retrieval.** It ranks MBPP's 974 solved functions by TF-IDF similarity to the docstring and
-   runs the best ones, inside a sandbox, on the examples.
+   runs the best ones in a separate resource-limited process on the examples.
 
 Goal: beat a 360M-parameter LLM (SmolLM2-360M) on HumanEval pass@1 using one CPU core.
 
@@ -23,12 +23,18 @@ Goal: beat a 360M-parameter LLM (SmolLM2-360M) on HumanEval pass@1 using one CPU
 | SmolLM2-360M base (`baseline_llm.py`) | 13 (15.9%) | 8 (9.8%) | 21 (12.8%) |
 | NoNet Coder, checkpoint 1 (commit `3c816d1`) | 19 (23.2%) | 14 (17.1%) | 33 (20.1%) |
 | NoNet Coder, milestone 1 (commit `0940738`) | 18 (22.0%)* | not run | – |
+| NoNet Coder, CPU-budget experiment (previously uncommitted) | 20 (24.4%)* | not run | – |
 
 \* Two identical runs gave 18/82 with the same solved set (`results_dev_v5*.json`, with metadata in
 `results_dev_v5.meta.json`). The search budget is **wall-clock** and 7 workers oversubscribe the machine:
 the only v4→v5 loss (58) and the provisional-run win (101) both time out under the pool but pass 3/3 in
-isolation. Treat ±1–2 dev tasks as within measurement noise until the budget is made load-independent.
+isolation. Treat ±1–2 dev tasks as within measurement noise. Subsequent runs use a different,
+CPU-time enumeration budget and should be compared as a separate evaluation protocol.
 The old and new scorers agreed on all 82 programs (`--ab-scorer`).
+The CPU-budget experiment used 10 CPU seconds for enumeration and four workers
+(`results_dev_cpu.json` and `.meta.json`); dev 58 and 101 passed. In a separate repeated
+check, 58 passed twice with one worker but only once in two attempts with four workers.
+CPU deadlines reduce scheduling sensitivity; they do not make the search deterministic.
 
 Failure breakdown on test: 32 overfit (the program matches the examples but fails the hidden tests),
 25 timed out, 9 had no examples, 2 crashed with a KeyError.
@@ -48,7 +54,7 @@ Failure breakdown on test: 32 overfit (the program matches the examples but fail
    The **test** split has been evaluated once (checkpoint 1). Any further test run must be
    reported as a re-run, and you must never tune against test failures.
 5. **MBPP code is untrusted third-party code.** Run it only through `nonet/sandbox_runner.py`
-   (an isolated `python -I` subprocess with CPU and wall-clock limits). Never `exec` MBPP code in
+   (a separate `python -I` subprocess with CPU and wall-clock limits). Never `exec` MBPP code in
    the main process. The repo owner explicitly approved sandboxed execution only.
 6. Constants used in synthesis must come from the docstring's **prose**, never from example lines
    or example outputs (this prevents copying answers). See `doc_constants`.
@@ -61,11 +67,12 @@ nonet-coder/
 ├── README.md                 short public summary and results table
 ├── nonet/                    THE SYSTEM (the only code that counts as "the model")
 │   ├── extract.py            parse the prompt: signature, docstring, I/O examples
+│   ├── __main__.py           command-line interface for generating a program from a prompt
 │   ├── synth.py              the enumerative synthesizer, ranking, final choice
 │   ├── prior.py              doc-conditioned component costs from data/prior.json
 │   ├── lib.py                LIB_SRC: concept-library helpers, prepended to every program
-│   ├── retrieve.py           TF-IDF retrieval over MBPP + call into the sandbox
-│   └── sandbox_runner.py     isolated runner that executes MBPP candidates (stdlib only)
+│   ├── retrieve.py           TF-IDF retrieval over MBPP + call into the runner
+│   └── sandbox_runner.py     resource-limited runner for MBPP candidates (stdlib only)
 ├── train_prior.py            builds data/prior.json from data/mbpp.jsonl (AST counting)
 ├── run_eval.py               runs the synthesizer on a split, scores with hidden tests
 ├── baseline_llm.py           SmolLM2-360M HumanEval baseline (runs in .venv-llm)
@@ -85,12 +92,13 @@ nonet-coder/
 
 `run_eval.py:work()` → `nonet.synth.synthesize(prompt, entry, budget)` → returns
 `(program_source, chosen_expr, how, n_examples)`. Then `run_eval.py` appends the HumanEval `test`
-code and `check(entry)`, and runs it via `python -I nonet/sandbox_runner.py --script <file>` (15 s CPU limit, 15 s wall
-timeout; the wall timeout usually binds first), because a retrieved program embeds MBPP code (rule 5).
+code and `check(entry)`, and runs it via `python -I nonet/sandbox_runner.py --script <file>` (15 s CPU limit,
+120 s wall watchdog), because a retrieved program embeds MBPP code (rule 5).
 Each result records a `reason` (pass/assert/exception/cpu-limit/wall-timeout/runner-error), and
 `--out X.json` also writes `X.meta.json` (commit, Python, data hashes, budget, workers, wall time).
 `--ab-scorer` additionally scores with the pre-v5 plain subprocess for comparison. These are resource
 limits, **not** an OS security sandbox: MBPP code can still reach the filesystem and network.
+Generated files may embed MBPP code; running them separately does not inherit the runner's limits.
 
 ### 4.1 `nonet/extract.py`: examples from the docstring
 - `parse_prompt(prompt, entry)` (line 64) → `{"args", "ann", "ret", "doc", "helpers"}`, using
@@ -104,7 +112,8 @@ limits, **not** an OS security sandbox: MBPP code can still reach the filesystem
   - `Input: ... Output: ...`, on one line or across multiple lines
   - a docstring that calls the function by a different name (falls back to any `name(` with the
     right arity)
-- Known gaps: 4 dev problems yield no examples (32, 50, 83, 115). HumanEval has its own docstring
+- `parse_prompt` also recognizes a descriptive string following leading imports inside a function.
+- Known gaps: 3 dev problems yield no examples (32, 50, 83). HumanEval has its own docstring
   errors (for example `median` shows 15.0).
 
 ### 4.2 `nonet/synth.py`: the synthesizer (the core, about 720 lines)
@@ -138,7 +147,7 @@ limits, **not** an OS security sandbox: MBPP code can still reach the filesystem
      (i<j combinations) / `adj` (`zip(L, L[1:])`), run a separate per-element `Bank` for the
      comprehension body. It then emits `[body for ...]`, `[x for ... if pred]`,
      `[body for ... if pred]`, and `sorted`/`max`/`min(..., key=lambda x: body)` as top-level terms.
-  4. Keep growing until the deadline. The search stops 2 cost levels after the first clean candidate
+  4. Keep growing until the process CPU-time deadline. The search stops 2 cost levels after the first clean candidate
      (one that uses all args and doesn't crash).
 - **Ranking:** `rank_key()` (line 554) is
   `(not uses_all_args, crashes_on_probes>0, wrong_type_on_probes>0, cost + 2*crash + 2*badtype, len)`.
@@ -168,8 +177,9 @@ limits, **not** an OS security sandbox: MBPP code can still reach the filesystem
   top 150 (sim > 0.05) to the sandbox in a single subprocess call.
 - `sandbox_runner.py` reads a `repr()` job from stdin and `ast.literal_eval`s it (JSON would turn
   tuples into lists). For each candidate it tries every argument permutation on the examples and
-  counts crashes on probes. It limits each call to 0.3 s (`ITIMER_REAL`), the whole process to
-  20 s of CPU (`RLIMIT_CPU`), and sends stdout to /dev/null. It's **stdlib only** and must never
+  counts crashes on probes. It limits each call to 0.3 s CPU (`ITIMER_PROF`), the whole process to
+  20 s of CPU (`RLIMIT_CPU`), and sends stdout to /dev/null. The caller applies a 120 s wall watchdog.
+  Enumeration's CPU budget excludes this subprocess. It's **stdlib only** and must never
   import project code.
 - Retrieval contributed 3 dev passes and 5 test passes.
 
@@ -186,11 +196,14 @@ cd ~/nonet-coder
 python3 lint_rules.py                                   # static checks only; must print "lint OK"
 python3 -m unittest discover tests                      # regression tests (stdlib only)
 python3 train_prior.py                                  # rebuild data/prior.json
-python3 run_eval.py --split dev --budget 10 --out results_dev_vN.json
+python3 run_eval.py --split dev --budget 10 --workers 4 --out results_dev_vN.json
 python3 run_eval.py --only 0,12,51 --budget 10          # specific problem ids
 .venv-llm/bin/python baseline_llm.py HuggingFaceTB/SmolLM2-360M   # about 40 min on CPU/MPS
 ```
-- `run_eval.py` uses a pool of 7 worker processes. A dev run takes about 4–5 minutes. Output is
+- `run_eval.py` defaults to one worker; `--workers` controls parallel problems. `--budget` is the
+  enumeration process CPU time in seconds, excluding retrieval and scoring. CPU timing reduces
+  scheduler sensitivity but does not guarantee repeatability; wall watchdogs, hardware, CPU
+  frequency, and decisions close to deadlines can still change results. Output is
   one line per problem, `PASS|WRONG|----  id  entry  how  expr`, ending with a summary line
   giving pass@1, found-consistent and overfit counts.
 - Use the global `python3` (3.10) for `nonet/`, which needs only the stdlib. The global numpy and

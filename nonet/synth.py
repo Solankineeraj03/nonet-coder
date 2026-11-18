@@ -348,7 +348,7 @@ class Bank:
                     continue
                 if emit(render(fmt, [a.code]), v):
                     return True
-            if time.time() > self.deadline or self.count > self.max_terms:
+            if time.process_time() > self.deadline or self.count > self.max_terms:
                 return False
         for name, gs, fn, fmt, oc in self.bi:
             rem = cost - oc
@@ -371,7 +371,7 @@ class Bank:
                             continue
                         if emit(render(fmt, [a.code, b.code]), v):
                             return True
-                    if time.time() > self.deadline or self.count > self.max_terms:
+                    if time.process_time() > self.deadline or self.count > self.max_terms:
                         return False
         for name, gs, fn, fmt, oc in self.te:
             rem = cost - oc
@@ -395,7 +395,7 @@ class Bank:
                                     continue
                                 if emit(render(fmt, [a.code, b.code, c.code]), v):
                                     return True
-                            if time.time() > self.deadline or self.count > self.max_terms:
+                            if time.process_time() > self.deadline or self.count > self.max_terms:
                                 return False
         return False
 
@@ -429,7 +429,7 @@ BASE_CONSTS = [(0, 1), (1, 1), (2, 1), (-1, 2), (10, 2), (3, 2), ("", 2), (" ", 
 def seed(bank, env, nums, strs):
     for name, vals in env:
         bank.add(name, 1, tuple(vals))
-    consts = list(BASE_CONSTS) + [(v, 2) for v in nums] + [(x, 2) for x in strs]
+    consts = list(BASE_CONSTS) + [(v, 2) for v in sorted(nums)] + [(x, 2) for x in sorted(strs)]
     for v, c in consts:
         bank.add(repr(v), c, tuple([v] * bank.n))
 
@@ -479,7 +479,7 @@ class Synth:
         return out
 
     def run(self):
-        t0 = time.time()
+        t0 = time.process_time()
         deadline = t0 + self.budget
         args = self.info["args"]
         ex = self.ex
@@ -531,13 +531,13 @@ class Synth:
                         all(len(v) <= 60 for v in t.vals if v is not ERR) and any(len(v) > 0 for v in vs):
                     sources.append(t)
         sources = sources[:12]
-        lam_deadline = time.time() + self.budget * 0.35
+        lam_deadline = min(deadline, time.process_time() + self.budget * 0.35)
         hof_terms = self.build_hof(sources, env, nums, strs, lam_deadline)
         for t in hof_terms:
             hook(t.code, t.cost, t.vals)
             top.extra.setdefault(max(4, t.cost), []).append(t)
         c = 4
-        while time.time() < deadline and c < 60:
+        while time.process_time() < deadline and c < 60:
             top.grow(c)
             if done(c):
                 break
@@ -567,11 +567,11 @@ class Synth:
         fc = prior_cost("M_filter", W, False)
         kc = prior_cost("M_key", W, any(w in self.doc for w in ("key", "sort", "order", "largest", "smallest")))
         mx = prior_cost("M_x", W, False)
-        per_src = max(0.2, (lam_deadline - time.time()) / max(1, len(sources)))
+        per_src = max(0.2, (lam_deadline - time.process_time()) / max(1, len(sources)))
         for src in sources:
-            if time.time() > lam_deadline:
+            if time.process_time() > lam_deadline:
                 break
-            sd = min(lam_deadline, time.time() + per_src)
+            sd = min(lam_deadline, time.process_time() + per_src)
             S = par(src.code)
             for mode in ("x", "ix", "pair", "adj"):
                 rows = []
@@ -603,7 +603,7 @@ class Synth:
                 seed(b, lenv, nums, strs)
                 for c in range(2, 16):
                     b.grow(c)
-                    if time.time() > sd or b.count > 5000:
+                    if time.process_time() > sd or b.count > 5000:
                         break
                 gen = {"x": f"for x in {src.code}", "ix": f"for i, x in enumerate({src.code})",
                        "pair": f"for i, x in enumerate({src.code}) for y in {S}[i + 1:]",

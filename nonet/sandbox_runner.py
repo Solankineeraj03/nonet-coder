@@ -34,11 +34,11 @@ def same(v, out):
 
 
 def timed(fn, t):
-    signal.setitimer(signal.ITIMER_REAL, t)
+    signal.setitimer(signal.ITIMER_PROF, t)
     try:
         return fn()
     finally:
-        signal.setitimer(signal.ITIMER_REAL, 0)
+        signal.setitimer(signal.ITIMER_PROF, 0)
 
 
 def run_script(path, cpu=15):
@@ -70,7 +70,7 @@ def main():
     if len(sys.argv) in (3, 4) and sys.argv[1] == "--script":  # --script FILE [CPU_SECONDS]
         run_script(sys.argv[2], int(sys.argv[3]) if len(sys.argv) == 4 else 15)
     resource.setrlimit(resource.RLIMIT_CPU, (20, 20))
-    signal.signal(signal.SIGALRM, alarm)
+    signal.signal(signal.SIGPROF, alarm)
     job = ast.literal_eval(sys.stdin.read())
     sys.stdin = None
     real_stdout = sys.stdout

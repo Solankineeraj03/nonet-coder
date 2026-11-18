@@ -24,7 +24,7 @@ def score(src, scorer, cpu=None):
         f.write(src)
     argv = [sys.executable, "-I", RUNNER, "--script", f.name] + ([str(cpu)] if cpu else []) if scorer == "runner" else [sys.executable, "-I", f.name]
     try:
-        r = subprocess.run(argv, capture_output=True, timeout=15)
+        r = subprocess.run(argv, capture_output=True, timeout=120)
         rc = r.returncode
         if rc == 0:
             return "pass"
@@ -44,6 +44,7 @@ def work(args):
     from nonet.lib import LIB_SRC
     i, budget, ab = args
     ru0 = resource.getrusage(resource.RUSAGE_SELF)
+    child0 = resource.getrusage(resource.RUSAGE_CHILDREN)
     p = P[i]
     t0 = time.time()
     signal.signal(signal.SIGVTALRM, _alarm)
@@ -56,12 +57,14 @@ def work(args):
     signal.setitimer(signal.ITIMER_VIRTUAL, 0)
     dt = time.time() - t0
     ru1 = resource.getrusage(resource.RUSAGE_SELF)
+    child1 = resource.getrusage(resource.RUSAGE_CHILDREN)
     synth_cpu = (ru1.ru_utime - ru0.ru_utime) + (ru1.ru_stime - ru0.ru_stime)  # excludes retrieval subprocess
+    retrieval_cpu = (child1.ru_utime - child0.ru_utime) + (child1.ru_stime - child0.ru_stime)
     test_src = program + "\n\n" + p["test"] + f"\n\ncheck({p['entry_point']})\n"
     reason = score(test_src, "runner")
     out = {"debug": None, "id": i, "entry": p["entry_point"], "code": code, "how": how, "nex": nex,
            "passed": reason == "pass", "reason": reason, "synth_found": code is not None,
-           "secs": round(dt, 2), "synth_cpu": round(synth_cpu, 2)}
+           "secs": round(dt, 2), "synth_cpu": round(synth_cpu, 2), "retrieval_cpu": round(retrieval_cpu, 2)}
     if ab:
         out["reason_legacy"] = score(test_src, "legacy")
     return out
@@ -77,28 +80,30 @@ def meta(a, n):
     h = lambda f: hashlib.sha256(open(f, "rb").read()).hexdigest()[:16]
     return {"commit": git("rev-parse", "HEAD"), "dirty": bool(git("status", "--porcelain", "--untracked-files=no")),
             "python": sys.version.split()[0], "platform": platform.platform(), "machine": platform.machine(),
-            "cpu_count": os.cpu_count(), "workers": WORKERS, "budget": a.budget, "split": a.split, "n": n,
-            "scorer": "sandbox_runner --script (RLIMIT_CPU 15s, wall 15s; wall usually binds first)", "ab_scorer": a.ab_scorer,
+            "cpu_count": os.cpu_count(), "workers": a.workers, "budget": a.budget,
+            "budget_unit": "enumeration process CPU seconds; retrieval separate", "split": a.split, "n": n,
+            "retrieval_limits": "20 CPU seconds per subprocess; 0.3 CPU seconds per call; 120s wall watchdog",
+            "scorer": "sandbox_runner --script (RLIMIT_CPU 15s, wall watchdog 120s)", "ab_scorer": a.ab_scorer,
             "data_sha256_16": {f: h(f) for f in ("data/HumanEval.jsonl", "data/mbpp.jsonl", "data/prior.json", "data/split.json")},
             "started": time.strftime("%Y-%m-%dT%H:%M:%S%z")}
-
-
-WORKERS = 7
 
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--split", default="dev")
     ap.add_argument("--budget", type=float, default=10.0)
+    ap.add_argument("--workers", type=int, default=1, help="parallel problems (default: 1)")
     ap.add_argument("--only", type=str, default="")
     ap.add_argument("--out", default="")
     ap.add_argument("--ab-scorer", action="store_true", help="also score each program with the pre-v5 plain subprocess")
     a = ap.parse_args()
+    if a.budget <= 0 or a.workers < 1:
+        ap.error("--budget and --workers must be positive")
     S = json.load(open("data/split.json"))
     ids = [int(x) for x in a.only.split(",")] if a.only else (S[a.split] if a.split != "all" else list(range(164)))
     M = meta(a, len(ids))
     t0 = time.time()
-    with Pool(WORKERS) as pool:
+    with Pool(a.workers) as pool:
         res = pool.map(work, [(i, a.budget, a.ab_scorer) for i in ids], chunksize=1)
     M["wall_secs"] = round(time.time() - t0, 1)
     res.sort(key=lambda r: r["id"])

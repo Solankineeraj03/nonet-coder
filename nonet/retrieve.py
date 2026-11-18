@@ -60,7 +60,7 @@ def similarity(a_words, b_words, idf):
     return dot / (na * nb + 1e-9)
 
 
-def retrieve(info, examples, probes, entry, topk=150, timeout=8.0):
+def retrieve(info, examples, probes, entry, topk=150, timeout=120.0):
     """-> list of dicts {sim, code, call, crash, id} for library functions matching every example."""
     lib, idf = load_library()
     from .synth import EXLINE

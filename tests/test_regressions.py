@@ -1,5 +1,6 @@
 """Regression tests for milestone-1 fixes. Run: python3 -m unittest discover tests"""
-import os, subprocess, sys, tempfile, unittest
+import ast, os, subprocess, sys, tempfile, unittest
+from unittest import mock
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from nonet import prior
 from nonet.synth import doc_constants
@@ -53,6 +54,13 @@ def mk(entry, args, doc):
 
 
 class SpanProvenance(unittest.TestCase):
+    def test_examples_after_leading_function_import(self):
+        prompt = ('def measured(x):\n    import math\n    """Return x.\n\n'
+                  '    Input:\n        x: 918\n    Output: 918\n    """\n')
+        info, examples = extract_examples(prompt, "measured")
+        self.assertEqual(examples, [([918], 918)])
+        self.assertNotIn(918, doc_constants(info["doc"], examples, "measured", info["ex_lines"])[0])
+
     def test_multiline_input_output_block(self):  # reproduced leak from review 2
         nums, strs = consts_for(mk("lab", "x", "Label x.\nExample:\nInput:\n  x: 918\nOutput:\n  'ok'\n"), "lab")
         self.assertNotIn(918, nums)
@@ -138,6 +146,55 @@ class Scoring(unittest.TestCase):
         self.assertEqual(calls[0][2:4], [os.path.abspath(self.re.RUNNER), "--script"])
         self.assertFalse(r["passed"])
         self.assertIn(r["reason"], ("assert", "exception"))
+
+
+class CpuBudgets(unittest.TestCase):
+    def test_search_does_not_consult_wall_clock(self):
+        from nonet.synth import Synth
+        prompt = mk("f", "x", "Return x.\n>>> f(123)\n123\n")
+        with mock.patch("nonet.synth.time.time", side_effect=AssertionError("wall clock used")):
+            code, _ = Synth(prompt, "f", 0.05).run()
+        self.assertEqual(code, "x")
+
+    def test_retrieval_call_limit_counts_cpu_not_sleep(self):
+        runner = os.path.join(os.path.dirname(__file__), "..", "nonet", "sandbox_runner.py")
+        job = {"cands": [
+            ("def slow(x):\n while True: pass\n", "slow", 1, 1, 0),
+            ("import time\ndef sleepy(x):\n time.sleep(0.5)\n return x\n", "sleepy", 1, 1, 1),
+        ], "examples": [([7], 7)], "probes": [], "k": 1}
+        result = subprocess.run([sys.executable, "-I", runner], input=repr(job), text=True,
+                                capture_output=True, timeout=10, check=True)
+        self.assertEqual(ast.literal_eval(result.stdout), [(1, (0,), 0)])
+
+class CommandLine(unittest.TestCase):
+    def run_cli(self, prompt, *args):
+        return subprocess.run([sys.executable, "-m", "nonet", *args], input=prompt, text=True,
+                              capture_output=True, timeout=20, cwd=os.path.join(os.path.dirname(__file__), ".."))
+
+    def test_generates_program_from_standard_input(self):
+        prompt = mk("identity", "x", "Return x.\n>>> identity(123)\n123\n")
+        result = self.run_cli(prompt, "--no-retrieval", "--budget", "0.2")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("def identity(x):", result.stdout)
+        self.assertIn("return x", result.stdout)
+        self.assertIn("matched 1 extracted examples", result.stderr)
+
+    def test_does_not_report_failure_as_a_program(self):
+        result = self.run_cli(mk("identity", "x", "Return x."), "--no-retrieval", "--budget", "0.2")
+        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.stdout, "")
+        self.assertIn("No program found", result.stderr)
+
+    def test_multiple_functions_require_entry(self):
+        result = self.run_cli(mk("helper", "x", "Return x.") + mk("target", "x", "Return x."))
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("--entry", result.stderr)
+
+    def test_rejects_target_that_is_not_the_final_function(self):
+        result = self.run_cli(mk("helper", "x", "Return x.") + mk("target", "x", "Return x."),
+                              "--entry", "helper")
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("last top-level statement", result.stderr)
 
 
 if __name__ == "__main__":

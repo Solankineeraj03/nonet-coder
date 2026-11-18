@@ -2,7 +2,7 @@
 
 Writes Python from a docstring with **no neural network**: enumerative program search +
 an MBPP-counted prior + TF-IDF retrieval from a code library, verified on the docstring's examples.
-One CPU core, ~10-18 s per problem, ~300 KB of code + data.
+The synthesizer uses one CPU core per problem; search time depends on the CPU budget.
 
 ## Results (HumanEval, greedy pass@1, hidden tests)
 
@@ -16,9 +16,52 @@ Test split was evaluated once, after development on dev only.
 ## Rules
 - Synthesizer sees only the prompt; never `canonical_solution` or `test`.
 - No weights, embeddings, or model calls. `lint_rules.py` checks for HumanEval names and NN/network deps.
-- Library (MBPP) code is executed only in an isolated `python -I` subprocess with CPU/time limits.
+- During synthesis and evaluation, library (MBPP) code runs through a separate `python -I` process
+  with CPU and wall-clock limits.
 
-## Run
-    python3 train_prior.py                     # counts from MBPP -> data/prior.json
-    python3 run_eval.py --split dev            # or --split test / all
-    .venv-llm/bin/python baseline_llm.py       # LLM baseline
+## Generate a function
+
+Save a Python function signature and docstring with input/output examples in `prompt.py`:
+
+```python
+def double(x):
+    """Return twice x.
+
+    >>> double(2)
+    4
+    >>> double(3)
+    6
+    """
+```
+
+Then run:
+
+```bash
+python3 -m nonet prompt.py --budget 10 -o generated.py
+```
+
+Omit `prompt.py` to read from standard input, or omit `-o` to write the generated program to
+standard output. Use `--entry NAME` when the prompt contains multiple top-level functions.
+The target function must be the last top-level statement so the generated body can be appended to it.
+`--budget` sets the enumeration CPU budget in seconds; retrieval has a separate limit. Run
+`python3 -m nonet --help` for options. If no candidate is found, the command exits with an error.
+
+A candidate matches the examples the parser extracted; it may still be wrong. Review and test it
+before use. Retrieval executes third-party library code in a separate resource-limited Python
+process, but this is **not an OS security sandbox** and does not block filesystem or network access.
+Use `--no-retrieval` to disable it.
+If retrieval is used, the generated file can contain third-party MBPP code. Running that file later
+executes the code with the privileges and resource limits of your own Python process; the retrieval
+runner's limits do not follow the generated file. Inspect it before running it.
+
+## Development
+
+```bash
+python3 lint_rules.py
+python3 -m unittest discover -s tests
+python3 train_prior.py                     # counts from MBPP -> data/prior.json
+python3 run_eval.py --split dev --workers 4 --budget 10 --out results_dev.json
+.venv-llm/bin/python baseline_llm.py       # LLM baseline
+```
+
+The held-out test split has already been evaluated once; see `AGENTS.md` before running it again.
