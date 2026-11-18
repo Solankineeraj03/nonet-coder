@@ -1,8 +1,42 @@
 # NoNet Coder
 
-Writes Python from a docstring with **no neural network**: enumerative program search +
-an MBPP-counted prior + TF-IDF retrieval from a code library, verified on the docstring's examples.
-The synthesizer uses one CPU core per problem; search time depends on the CPU budget.
+**Program synthesis without neural networks.** NoNet Coder writes the body of a Python function
+from its signature and docstring using classical search, counting statistics and retrieval: no
+weights, no embeddings, no model calls, and only the Python standard library.
+
+On HumanEval it **outperforms a 360M-parameter language model (SmolLM2-360M)**:
+**17.1% vs 9.8% pass@1** on a held-out split, running on a single CPU core per problem.
+
+## Highlights
+
+- **Enumerative program search:** bottom-up, cost-ordered, type-directed construction of Python
+  expressions, with observational-equivalence pruning (programs that behave identically on all inputs
+  are merged) and synthesized comprehensions, filters and `key=` lambdas.
+- **Learned cost prior:** docstring-word / code-component co-occurrence counts from 974 MBPP
+  solutions decide which components are cheap to try for a given docstring.
+- **Retrieval:** TF-IDF ranking of the MBPP library; candidates are verified on the docstring's
+  examples in a separate, resource-limited Python process.
+- **Overfitting defenses:** probe inputs penalize candidates that crash or change type, constants come
+  only from the docstring's prose (never from example answers), and candidates that use every
+  argument are ranked first.
+- **Evaluation discipline:** fixed dev/test split with a single held-out evaluation, static and
+  regression checks against answer leakage, and a CPU-time search budget that reproduced identical
+  results across repeated runs.
+
+## How it works
+
+```
+prompt ──► extract signature, docstring, I/O examples
+             │
+             ├─► retrieval: TF-IDF over MBPP ──► verify on examples (subprocess)
+             │
+             └─► enumerative search, guided by the prior ──► candidates matching all examples
+                                                              │
+                         rank (probe crashes, types, cost) ◄──┘
+                                       │
+                                       ▼
+                     choose retrieval vs. search ──► generated function
+```
 
 ## Results (HumanEval, greedy pass@1, hidden tests)
 
@@ -10,8 +44,22 @@ The synthesizer uses one CPU core per problem; search time depends on the CPU bu
 |---|---|---|---|
 | SmolLM2-360M (base, bigcode-style prompt) | 13 (15.9%) | 8 (9.8%) | 21 (12.8%) |
 | **NoNet Coder** (checkpoint 1) | 19 (23.2%) | **14 (17.1%)** | **33 (20.1%)** |
+| NoNet Coder (current, CPU-time budget) | 20 (24.4%) | not re-run | – |
 
-Test split was evaluated once, after development on dev only.
+The test split was evaluated once, after development on dev only; the current version has not been
+re-evaluated on it. The current dev score was identical across three clean runs. Of the 62 unsolved
+dev problems, 27 produce a program that matches the docstring's examples but fails the hidden tests,
+32 find no matching program within the budget, and 3 have no parseable examples.
+
+Large LLMs solve most of HumanEval; the point here is how far search plus simple statistics can go
+against a small neural model, not to compete with them.
+
+## Data
+
+- [HumanEval](https://github.com/openai/human-eval) (OpenAI, MIT License): evaluation problems in
+  `data/HumanEval.jsonl`. Only prompts are given to the synthesizer; hidden tests are used for scoring.
+- [MBPP](https://github.com/google-research/google-research/tree/master/mbpp) (Google Research,
+  CC BY 4.0): training data for the prior and the retrieval library, in `data/mbpp.jsonl`.
 
 ## Rules
 - Synthesizer sees only the prompt; never `canonical_solution` or `test`.
