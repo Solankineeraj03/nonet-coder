@@ -65,3 +65,8 @@ python3 run_eval.py --split dev --workers 4 --budget 10 --out results_dev.json
 ```
 
 The held-out test split has already been evaluated once; see `AGENTS.md` before running it again.
+To inspect search alternatives on dev tasks, add `--trace-candidates` with `--out` to the
+evaluation command. Each result then includes the example-matching enumerated candidates, their
+costs, probe failures, and rank keys, plus matching retrieval candidates. By default the log keeps
+the best 1,000 enumerated candidates per task; `--candidate-limit 0` records all of them. Tracing
+is restricted to dev tasks and can add time and produce large files.

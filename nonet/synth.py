@@ -464,6 +464,7 @@ class Synth:
         self.budget = budget
         self.banned = [entry] + self.info["helpers"]
         self.last_key = None
+        self.candidate_trace = None
 
     def probes(self, k=6):
         seen = {repr(e[0]) for e in self.ex}
@@ -498,6 +499,8 @@ class Synth:
         top = Bank(N, self.doc, deadline, real=real, banned=self.banned)
         env = [(a, [inp[i] for inp in inputs]) for i, a in enumerate(args)]
         cands = {}
+        if self.candidate_trace is not None:
+            self.candidate_trace["_candidates"] = cands
 
         def hook(code, cost, vals):
             if code not in cands and all(same(vals[r], outs[r]) for r in range(n)):
@@ -696,9 +699,12 @@ SIMPLE = 6
 STRONG = 0.45
 
 
-def synthesize(prompt, entry, budget=10.0, use_retrieval=True):
+def synthesize(prompt, entry, budget=10.0, use_retrieval=True, candidate_trace=None):
     from .retrieve import retrieve
     s = Synth(prompt, entry, budget)
+    s.candidate_trace = candidate_trace
+    if candidate_trace is not None:
+        candidate_trace["_synth"] = s
     rets = []
     if use_retrieval and s.ex:
         try:
@@ -711,6 +717,12 @@ def synthesize(prompt, entry, budget=10.0, use_retrieval=True):
         code, how = None, f"error:{type(e).__name__}"
     key = s.last_key if code else None
     which, r = choose(code, key, rets)
+    if candidate_trace is not None:
+        # Keep the unmodified candidate map until the caller serializes it after the search timer.
+        candidate_trace.update({"enum_choice": code, "enumeration_how": how, "choice": which,
+                                "retrieval": [{"similarity": x["sim"], "call": x["call"],
+                                               "probe_crashes": x["crash"], "library_id": x["id"]}
+                                              for x in rets]})
     s.debug = {"enum": code, "enum_key": key, "rets": [(x["sim"], x["call"], x["crash"], x["id"]) for x in rets]}
     if which == "ret":
         return LIB_SRC + "\n" + r["code"] + "\n\n" + prompt + f"    return {r['call']}\n", r["call"], "retrieval", len(s.ex)

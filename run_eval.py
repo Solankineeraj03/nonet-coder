@@ -42,7 +42,9 @@ def score(src, scorer, cpu=None):
 def work(args):
     import signal
     from nonet.lib import LIB_SRC
-    i, budget, ab = args
+    i, budget, ab = args[:3]
+    trace_limit = args[3] if len(args) > 3 else None
+    trace = {} if trace_limit is not None else None
     ru0 = resource.getrusage(resource.RUSAGE_SELF)
     child0 = resource.getrusage(resource.RUSAGE_CHILDREN)
     p = P[i]
@@ -51,7 +53,10 @@ def work(args):
     signal.setitimer(signal.ITIMER_VIRTUAL, budget * 2 + 5)
     # synthesizer gets ONLY the prompt text and entry-point name
     try:
-        program, code, how, nex = synthesize(p["prompt"], p["entry_point"], budget)
+        if trace is None:
+            program, code, how, nex = synthesize(p["prompt"], p["entry_point"], budget)
+        else:
+            program, code, how, nex = synthesize(p["prompt"], p["entry_point"], budget, candidate_trace=trace)
     except HardTimeout:
         program, code, how, nex = LIB_SRC + "\n" + p["prompt"] + "    return None\n", None, "HARDTIMEOUT", -1
     signal.setitimer(signal.ITIMER_VIRTUAL, 0)
@@ -60,14 +65,36 @@ def work(args):
     child1 = resource.getrusage(resource.RUSAGE_CHILDREN)
     synth_cpu = (ru1.ru_utime - ru0.ru_utime) + (ru1.ru_stime - ru0.ru_stime)  # excludes retrieval subprocess
     retrieval_cpu = (child1.ru_utime - child0.ru_utime) + (child1.ru_stime - child0.ru_stime)
+    debug = summarize_candidates(trace, trace_limit, how) if trace is not None else None
     test_src = program + "\n\n" + p["test"] + f"\n\ncheck({p['entry_point']})\n"
     reason = score(test_src, "runner")
-    out = {"debug": None, "id": i, "entry": p["entry_point"], "code": code, "how": how, "nex": nex,
+    out = {"debug": debug, "id": i, "entry": p["entry_point"], "code": code, "how": how, "nex": nex,
            "passed": reason == "pass", "reason": reason, "synth_found": code is not None,
            "secs": round(dt, 2), "synth_cpu": round(synth_cpu, 2), "retrieval_cpu": round(retrieval_cpu, 2)}
     if ab:
         out["reason_legacy"] = score(test_src, "legacy")
     return out
+
+
+def summarize_candidates(trace, limit, how):
+    """Serialize example-matching candidates after the synthesis timer has stopped."""
+    import heapq
+    synth = trace.pop("_synth", None)
+    candidates = trace.pop("_candidates", {})
+    if synth is None:
+        return {"complete": False, "error": "synthesis did not initialize"}
+    synth.candidate_trace = None
+    key = lambda item: synth.rank_key(item[0], item[1])
+    ordered = heapq.nsmallest(limit, candidates.items(), key=key) if limit else sorted(candidates.items(), key=key)
+    enum_how = trace.get("enumeration_how", how)
+    return {"complete": how != "HARDTIMEOUT" and not enum_how.startswith("error:"),
+            "enumeration_how": enum_how,
+            "enumerated_total": len(candidates), "enumerated_recorded": len(ordered),
+            "enumerated": [{"code": code, "cost": value[0], "probe_crashes": value[1],
+                            "probe_type_mismatches": value[2], "rank_key": list(key((code, value)))}
+                           for code, value in ordered],
+            "enum_choice": trace.get("enum_choice"), "choice": trace.get("choice"),
+            "retrieval": trace.get("retrieval", [])}
 
 
 def meta(a, n):
@@ -84,6 +111,8 @@ def meta(a, n):
             "budget_unit": "enumeration process CPU seconds; retrieval separate", "split": a.split, "n": n,
             "retrieval_limits": "20 CPU seconds per subprocess; 0.3 CPU seconds per call; 120s wall watchdog",
             "scorer": "sandbox_runner --script (RLIMIT_CPU 15s, wall watchdog 120s)", "ab_scorer": a.ab_scorer,
+            "trace_candidates": a.trace_candidates, "candidate_limit": a.candidate_limit if a.trace_candidates else None,
+            "only": a.only,
             "data_sha256_16": {f: h(f) for f in ("data/HumanEval.jsonl", "data/mbpp.jsonl", "data/prior.json", "data/split.json")},
             "started": time.strftime("%Y-%m-%dT%H:%M:%S%z")}
 
@@ -95,16 +124,24 @@ if __name__ == "__main__":
     ap.add_argument("--workers", type=int, default=1, help="parallel problems (default: 1)")
     ap.add_argument("--only", type=str, default="")
     ap.add_argument("--out", default="")
+    ap.add_argument("--trace-candidates", action="store_true", help="record example-matching candidates in output")
+    ap.add_argument("--candidate-limit", type=int, default=1000, help="maximum ranked candidates per task; 0 records all")
     ap.add_argument("--ab-scorer", action="store_true", help="also score each program with the pre-v5 plain subprocess")
     a = ap.parse_args()
-    if a.budget <= 0 or a.workers < 1:
-        ap.error("--budget and --workers must be positive")
+    if a.budget <= 0 or a.workers < 1 or a.candidate_limit < 0:
+        ap.error("--budget and --workers must be positive; --candidate-limit must be nonnegative")
+    if a.trace_candidates and not a.out:
+        ap.error("--trace-candidates requires --out")
     S = json.load(open("data/split.json"))
     ids = [int(x) for x in a.only.split(",")] if a.only else (S[a.split] if a.split != "all" else list(range(164)))
+    if a.trace_candidates and not set(ids) <= set(S["dev"]):
+        ap.error("--trace-candidates is restricted to dev tasks")
     M = meta(a, len(ids))
     t0 = time.time()
     with Pool(a.workers) as pool:
-        res = pool.map(work, [(i, a.budget, a.ab_scorer) for i in ids], chunksize=1)
+        jobs = [(i, a.budget, a.ab_scorer, a.candidate_limit) if a.trace_candidates else
+                (i, a.budget, a.ab_scorer) for i in ids]
+        res = pool.map(work, jobs, chunksize=1)
     M["wall_secs"] = round(time.time() - t0, 1)
     res.sort(key=lambda r: r["id"])
     for r in res:

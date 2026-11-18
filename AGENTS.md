@@ -24,6 +24,7 @@ Goal: beat a 360M-parameter LLM (SmolLM2-360M) on HumanEval pass@1 using one CPU
 | NoNet Coder, checkpoint 1 (commit `3c816d1`) | 19 (23.2%) | 14 (17.1%) | 33 (20.1%) |
 | NoNet Coder, milestone 1 (commit `0940738`) | 18 (22.0%)* | not run | – |
 | NoNet Coder, CPU-budget experiment (previously uncommitted) | 20 (24.4%)* | not run | – |
+| NoNet Coder, clean commit `6a0164f` (3 dev runs) | 20 (24.4%) each | not run | – |
 
 \* Two identical runs gave 18/82 with the same solved set (`results_dev_v5*.json`, with metadata in
 `results_dev_v5.meta.json`). The search budget is **wall-clock** and 7 workers oversubscribe the machine:
@@ -35,6 +36,8 @@ The CPU-budget experiment used 10 CPU seconds for enumeration and four workers
 (`results_dev_cpu.json` and `.meta.json`); dev 58 and 101 passed. In a separate repeated
 check, 58 passed twice with one worker but only once in two attempts with four workers.
 CPU deadlines reduce scheduling sensitivity; they do not make the search deterministic.
+Three sequential dev runs of clean commit `6a0164f` solved the same 20 tasks; their result and
+metadata files are `results_dev_clean_1..3.json` and corresponding `.meta.json` files.
 
 Failure breakdown on test: 32 overfit (the program matches the examples but fails the hidden tests),
 25 timed out, 9 had no examples, 2 crashed with a KeyError.
@@ -197,6 +200,7 @@ python3 lint_rules.py                                   # static checks only; mu
 python3 -m unittest discover tests                      # regression tests (stdlib only)
 python3 train_prior.py                                  # rebuild data/prior.json
 python3 run_eval.py --split dev --budget 10 --workers 4 --out results_dev_vN.json
+python3 run_eval.py --only 12,51 --trace-candidates --out dev_trace.json  # dev tasks only
 python3 run_eval.py --only 0,12,51 --budget 10          # specific problem ids
 .venv-llm/bin/python baseline_llm.py HuggingFaceTB/SmolLM2-360M   # about 40 min on CPU/MPS
 ```

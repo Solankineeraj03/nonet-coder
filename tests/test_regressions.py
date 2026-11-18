@@ -147,6 +147,30 @@ class Scoring(unittest.TestCase):
         self.assertFalse(r["passed"])
         self.assertIn(r["reason"], ("assert", "exception"))
 
+    def test_optional_candidate_logging(self):
+        from nonet.synth import synthesize
+        prompt = mk("identity", "x", "Return x.\n>>> identity(123)\n123\n")
+        trace = {}
+        _, plain_code, _, _ = synthesize(prompt, "identity", 0.2, use_retrieval=False)
+        _, code, _, _ = synthesize(prompt, "identity", 0.2, use_retrieval=False, candidate_trace=trace)
+        debug = self.re.summarize_candidates(trace, 1, "search")
+        self.assertEqual(code, "x")
+        self.assertEqual(code, plain_code)
+        self.assertEqual(debug["enum_choice"], code)
+        self.assertGreaterEqual(debug["enumerated_total"], 1)
+        self.assertEqual(debug["enumerated_recorded"], 1)
+        self.assertEqual(debug["enumerated"][0]["code"], "x")
+        self.assertEqual(debug["enumerated"][0]["probe_crashes"], 0)
+
+    def test_candidate_trace_marks_partial_and_truncated(self):
+        from types import SimpleNamespace
+        synth = SimpleNamespace(candidate_trace=None, rank_key=lambda code, value: (value[0],))
+        trace = {"_synth": synth, "_candidates": {"a": (1, 0, 0), "b": (2, 0, 0)}}
+        debug = self.re.summarize_candidates(trace, 1, "HARDTIMEOUT")
+        self.assertFalse(debug["complete"])
+        self.assertEqual((debug["enumerated_total"], debug["enumerated_recorded"]), (2, 1))
+        self.assertEqual(debug["enumerated"][0]["code"], "a")
+
 
 class CpuBudgets(unittest.TestCase):
     def test_search_does_not_consult_wall_clock(self):
